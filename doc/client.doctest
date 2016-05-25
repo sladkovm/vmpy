@@ -1,0 +1,30 @@
+We want a class that implements an application client (a.k.a. client) to the Strava API.
+
+Requirements:
+1. "client.config" JSON file that must be present in the same folder as client.py
+2. Client class will instantiate an object with attribute "client_id" and "client_secret"
+3. Client will have a method to retrieve current athlete (takes Athlete object as an input)
+
+Tested library:
+>>> from app import client
+
+Supporting libraries:
+>>> import os
+>>> from app import athlete
+
+Tests:
+
+Req #1
+>>> 'client.config' in os.listdir('./config')
+True
+
+Req #2
+>>> test_client = client.Client()
+>>> len(test_client.client_id) > 0
+True
+
+Req #3
+>>> test_athlete = athlete.Athlete()
+>>> test_client.retrieve_current_athlete(test_athlete)
+>>> isinstance(test_client.current_athlete, basestring)
+True
