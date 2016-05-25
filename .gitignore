@@ -1,0 +1,8 @@
+# Strava client and athlete config #
+####################################
+*.config
+
+# Explicit doctest files #
+##########################
+*.doctest
+
