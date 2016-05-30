@@ -1,7 +1,7 @@
 import unittest
 from strava import client, athlete, activity
 
-class TestActivity(unittest.TestCase):
+class TestActivityInit(unittest.TestCase):
 
     def setUp(self):
         self.activity_id = '587646088'
@@ -9,5 +9,8 @@ class TestActivity(unittest.TestCase):
         self.athlete  = athlete.Athlete()
         self.activity = activity.Activity(athlete=self.athlete, activity_id=self.activity_id)
 
-    def test_whenCall_activity_json_should_return_NonZeroStr(self):
+    def test_init_activity_should_return_NonZeroStr(self):
         self.failUnless(isinstance(self.activity.activity_json, basestring))
+
+    def test_init_activity_should_return_NonZeroDict(self):
+        self.assertIsInstance(self.activity.activity_dict, dict)

@@ -22,11 +22,11 @@ if __name__ == '__main__':
     # print test_athlete.list_of_activities_json
     #
 
-    test_athlete.retrieve_list_athlete_activities_json(params="2016-05-25T12:48:05Z")
-    print test_athlete.list_of_activities_json
+    # test_athlete.retrieve_list_athlete_activities_json(params="2016-05-25T12:48:05Z")
+    # print test_athlete.list_of_activities_json
 
-    #
-    # test_activity_id = '587646088'
-    # test_activity    = activity.Activity(athlete=test_athlete, activity_id=test_activity_id)
-    # print test_activity.activity_json
+
+    test_activity_id = '587646088'
+    test_activity    = activity.Activity(athlete=test_athlete, activity_id=test_activity_id)
+    print test_activity.activity_json
 
