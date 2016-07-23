@@ -1,5 +1,7 @@
-import json, os, logging, urllib, urllib2, dateutil.parser
-from strava import utilities
+import json, os, imp, logging
+import utilities
+
+
 logger = logging.getLogger(__name__)
 
 class Athlete:
@@ -10,39 +12,54 @@ class Athlete:
     '''
 
     def __init__(self, access_token='', athlete_id=''):
-        self.athlete_id              = athlete_id
-        self.access_token            = access_token
-        self.current_athlete_json    = None
+        # pre-init attributes
+        self.athlete_id = None
+        self.access_token = None
+        self.current_athlete_json = None
+        self.current_athlete_dict = None
         self.list_of_activities_json = None
-        if (len(self.access_token)==0):
+        # ---
+        (self.access_token, self.athlete_id) = self._init_current_athlete(access_token, athlete_id)
+        self.current_athlete_json = self._retrieve_current_athlete_json(self.access_token)
+        self.current_athlete_dict = utilities.Utilities.json_to_dict(self.current_athlete_json)
+
+    # --- Private methods -------
+    def _init_current_athlete(self, access_token, athlete_id):
+        if (len(access_token)==0): # access_token is not provided
             logger.info('Initializing athlete from ./config/athlete.config')
-            self._init_from_athlete_config()
-        # if (len(self.athlete_id)==0):
+            (access_token, athlete_id) = self._init_from_athlete_config()
+        else: # access_token is explicitely provided
+            #TODO: The athlete_id must also be checked for this case
+            logger.info('Initializing athlete using provided \n access_token = %s \n athlete_id = %s', self.access_token, self.athlete_id)
+            pass
+        return (access_token, athlete_id)
 
     def _init_from_athlete_config(self):
-        if 'athlete.py' in os.listdir('.'): # Class is called from the strava folder
-            append_path = '../'
-        else: # Class is called from the Root
-            append_path = './'
-        if 'athlete.config' in os.listdir(append_path + 'config'):
-            _athlete_json = open(append_path + 'config/athlete.config', 'r').read()
+        _athlete_id   = None
+        _access_token = None
+        append_path = imp.find_module('config')[1]
+        if 'athlete.config' in os.listdir(append_path):
+            _athlete_json = open(append_path + '/athlete.config', 'r').read()
         else:
             raise ImportError('File ./config/athlete.config not found')
         _athlete_dict = json.loads(_athlete_json)
-        self.athlete_id = _athlete_dict['athlete_id']
-        self.access_token = _athlete_dict['access_token']
+        _athlete_id   = _athlete_dict['athlete_id']
+        _access_token = _athlete_dict['access_token']
+        return (_access_token, _athlete_id)
 
-    def retrieve_current_athlete_json(self):
+    def _retrieve_current_athlete_json(self, access_token):
         '''
         Info: https://strava.github.io/api/v3/athlete/#get-details
         :return: None
         '''
         logger.info('Retrieving current athlete')
         _url = 'https://www.strava.com/api/v3/athlete'
-        _response = utilities.Utilities.strava_endpoint_request(url=_url, access_token=self.access_token)
+        _response = utilities.Utilities.strava_endpoint_request(url=_url, access_token=access_token)
         logger.debug('Retrieving current athlete response: %s', _response)
-        self.current_athlete_json = _response
+        return _response
 
+    # --- Public methods -------
+    # TODO this method must be tested
     def retrieve_list_athlete_activities_json(self, params=None):
         '''
         Info: https://strava.github.io/api/v3/activities/#get-activities
@@ -61,3 +78,4 @@ class Athlete:
 
 if __name__ == "__main__":
     test_athlete = Athlete()
+    print test_athlete

@@ -3,39 +3,50 @@
 # Run python -m unittest test.test_athlete
 
 
-import unittest, urllib
+import unittest, json
+from mock import patch, MagicMock
 from strava import athlete, utilities
 
 
-class TestAthleteConstructor(unittest.TestCase):
+class TestAthleteConstructorWithNoInput(unittest.TestCase):
 
-    def test_init_with_no_input_arguments(self):
-        self.athlete = athlete.Athlete()
-        self.failUnless(isinstance(self.athlete.athlete_id, basestring))
-        self.failUnless(len(self.athlete.athlete_id) > 0)
+    mock_athlete_id    = 227615
+    mock_access_token = "83ebeabdec09f6670863766f792ead24d61fe3f9"
+    mock_url = 'https://www.strava.com/api/v3/athlete'
+    mock_athlete_json = '{}'
+    mock_athlete_dict = json.loads(mock_athlete_json)
 
-    def test_init_with_access_token_input_argument(self):
-        self.access_token = 'test_token'
-        self.athlete = athlete.Athlete(access_token=self.access_token)
-        self.assertEqual(self.athlete.access_token, self.access_token)
+    @patch.object(athlete.Athlete, '_retrieve_current_athlete_json', return_value = mock_athlete_json)
+    @patch.object(athlete.Athlete, '_init_from_athlete_config', return_value = (mock_access_token, mock_athlete_id))
+    def test_init_from_athlete_config_is_called(self, mock_init_from_athlete_config, mock_retrieve_current_athlete_json):
+        test_athlete = athlete.Athlete()
+        # Assertions correct call
+        mock_init_from_athlete_config.assert_called_with()
 
+    @patch.object(athlete.Athlete, '_retrieve_current_athlete_json', return_value = mock_athlete_json)
+    @patch.object(athlete.Athlete, '_init_current_athlete', return_value = (mock_access_token, mock_athlete_id))
+    def test_init_current_athlete_is_called(self, mock_init_current_athlete, mock_retrieve_current_athlete_json):
+        test_athlete = athlete.Athlete()
+        mock_init_current_athlete.assert_called_with('', '')
+        self.assertEqual(test_athlete.access_token, self.mock_access_token)
+        self.assertEqual(test_athlete.athlete_id, self.mock_athlete_id)
 
-class TestAthleteRequestsJSON(unittest.TestCase):
+    @patch.object(athlete.Athlete, '_retrieve_current_athlete_json', return_value = mock_athlete_json)
+    @patch.object(athlete.Athlete, '_init_current_athlete', return_value = (mock_access_token, mock_athlete_id))
+    def test_retrieve_current_athlete_json_is_called(self, mock_init_current_athlete, mock_retrieve_current_athlete_json):
+        test_athlete = athlete.Athlete()
+        mock_retrieve_current_athlete_json.assert_called_with(self.mock_access_token)
+        self.assertEqual(test_athlete.current_athlete_json, self.mock_athlete_json)
 
-    def setUp(self):
-        self.athlete = athlete.Athlete()
+    @patch.object(utilities.Utilities, 'json_to_dict', return_value = mock_athlete_dict)
+    @patch.object(athlete.Athlete, '_retrieve_current_athlete_json', return_value = mock_athlete_json)
+    @patch.object(athlete.Athlete, '_init_current_athlete', return_value = (mock_access_token, mock_athlete_id))
+    def test_json_to_dict_is_called(self,mock_init_current_athlete,
+                                         mock_retrieve_current_athlete_json,
+                                         mock_json_to_dict):
+        test_athlete = athlete.Athlete()
+        mock_json_to_dict.assert_called_with(self.mock_athlete_json)
+        self.assertEqual(test_athlete.current_athlete_dict, self.mock_athlete_dict)
 
-    def test_retrieve_current_athlete_should_returnNonEmptyStr(self):
-        self.athlete.retrieve_current_athlete_json()
-        self.failUnless(len(self.athlete.current_athlete_json) > 0)
-
-    def test_retrieve_list_athlete_activities_json_should_returnStr(self):
-        self.athlete.retrieve_list_athlete_activities_json()
-        self.failIf(self.athlete.list_of_activities_json == 'StravaEndpointRequestError')
-        self.failUnless(isinstance(self.athlete.list_of_activities_json, basestring))
-
-    def test_retrieve_list_athlete_activities_json_after_should_returnStr(self):
-        _date_after_str = "1970-01-01T00:00:01Z" # 1 sec from Epoch
-        self.athlete.retrieve_list_athlete_activities_json(params=_date_after_str)
-        self.failIf(self.athlete.list_of_activities_json == 'StravaEndpointRequestError')
-        self.failUnless(isinstance(self.athlete.list_of_activities_json, basestring))
+if __name__ == '__main__':
+    unittest.main()

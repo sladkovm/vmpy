@@ -1,4 +1,4 @@
-import dateutil.parser, urllib2
+import dateutil.parser, urllib2, json
 import logging
 logger = logging.getLogger(__name__)
 
@@ -43,6 +43,12 @@ class Utilities():
         if (_response.code==200):
             _response_read = _response.read()
         else:
-            logger.error('Strava Endpoint request %s returned code %i', _req, _response.code)
+            # logger.error('Strava Endpoint request %s returned code %i', _req, _response.code)
             _response_read = 'StravaEndpointRequestError'
         return _response_read
+
+    @staticmethod
+    def json_to_dict(JSON_in):
+        logger.info('Converting JSON activity to dict')
+        dict_out = json.loads(JSON_in)
+        return dict_out

@@ -9,15 +9,11 @@ from strava import athlete
 
 class TestClient(unittest.TestCase):
 
-    def setUp(self):
-        self.client = client.Client()
+    def test(self):
+        pass
 
-    def test_whenCall_attr_client_id_should_returnNonEmptyStr(self):
-        self.failUnless(isinstance(self.client.client_id, basestring))
-        self.failUnless(len(self.client.client_id) > 0)
 
-    def test_whenCall_attr_client_secret_should_returnNonEmptyStr(self):
-        self.failUnless(isinstance(self.client.client_secret, basestring))
-        self.failUnless(len(self.client.client_secret) > 0)
+if (__name__=='__main__'):
+    unittest.main()
 
 

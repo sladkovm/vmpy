@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
 
     test_athlete = athlete.Athlete()
-    test_athlete.retrieve_current_athlete_json()
+    test_athlete._retrieve_current_athlete_json()
 
     test_class = test_athlete.__class__
     test_class_str = str(test_class)
@@ -31,5 +31,5 @@ if __name__ == '__main__':
 
     test_activity_id = '587646088'
     test_activity    = activity.Activity(athlete=test_athlete, activity_id=test_activity_id)
-    print test_activity.activity_json
+    print test_activity.activity_dict
 
