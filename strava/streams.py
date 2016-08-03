@@ -60,19 +60,26 @@ class Streams():
             _url = URL_BASE + self.activity_id +'/streams/'+ stream_type
             _response_json[stream_type]  = utilities.Utilities.strava_endpoint_request(url=_url, access_token=_access_token)
             _response_dict[stream_type] = utilities.Utilities.json_to_dict(_response_json[stream_type])
-            _response_dict_np[stream_type]   = self._extract_np_array_from_dict(_response_dict[stream_type])
+            _np_array = self._extract_np_array_from_dict(_response_dict[stream_type], stream_type)
+            _response_dict_np[stream_type]   = _np_array
         # logger.debug('Response is %s', _response)
         return (_response_json, _response_dict, _response_dict_np)
 
-    def _extract_np_array_from_dict(self, dict_stream):
+    def _extract_np_array_from_dict(self, dict_stream, stream_type):
         '''
         TODO: add validation of the extracted parameters
         '''
-        if (dict_stream.__len__()>1): # non indexing stream (not a distance)
+
+        if (stream_type in ['altitude', 'cadence', 'grade_smooth', 'heartrate', 'moving', 'temp', 'velocity_smooth', 'watts']):
             _data = dict_stream[1]['data']
-        else: # stream of a distance
+        elif (stream_type in ['distance', 'time', 'latlng']):
             _data = dict_stream[0]['data']
-        _np_stream = np.asarray(_data, dtype=float)
+        else:
+            raise LookupError
+        if (stream_type in ['moving']):
+            _np_stream = np.asarray(_data, dtype=bool)
+        else:
+            _np_stream = np.asarray(_data, dtype=float)
         return _np_stream
 
 

@@ -18,6 +18,7 @@ class Athlete:
         self.current_athlete_json = None
         self.current_athlete_dict = None
         self.list_of_activities_json = None
+        self.list_of_activities_dict = None
         # ---
         (self.access_token, self.athlete_id) = self._init_current_athlete(access_token, athlete_id)
         self.current_athlete_json = self._retrieve_current_athlete_json(self.access_token)
@@ -73,9 +74,20 @@ class Athlete:
         else:
             _response = utilities.Utilities.strava_endpoint_request(url=_url, access_token=self.access_token, data=params)
         self.list_of_activities_json = _response
+        self.list_of_activities_dict = utilities.Utilities.json_to_dict(_response)
         logger.debug('Retrieving list_of_activities: %s', self.list_of_activities_json)
+
+    def print_list_athlete_activities(self):
+        if (self.list_of_activities_dict==None):
+            logger.info('Activity list is not retrived, retrieving the list')
+            self.retrieve_list_athlete_activities_json()
+        for _activity in self.list_of_activities_dict:
+            print '%s \t id:%s \t %s' %(_activity['start_date_local'], _activity['id'], _activity['name'])
 
 
 if __name__ == "__main__":
+
+    # Init from config
     test_athlete = Athlete()
     print test_athlete
+

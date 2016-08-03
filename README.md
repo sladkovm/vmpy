@@ -3,7 +3,7 @@
 ## Purpose
 
 This hobby project is a combination of my passion for cycling and interest in quantitative sports 
-physiology. It also serves as a platform for improving my Python programming skills resulting heavy 
+physiology. It also serves as a platform for improving my Python programming skills resulting in heavy 
 usage of Object Oriented Programming and Test Driven Development approaches  (in contrast to what 
 I have to use with scientific Python at my daily job as a physics engineer)
 
@@ -13,7 +13,7 @@ I have to use with scientific Python at my daily job as a physics engineer)
 The *Velometria.py* library provides the following functionality:
 
 * Python wrapper around the Strava API v3 for fetching Athletes and Activities data
-* Library for calculating and visualising various sport performance metrics (will be added soon)
+* Library for calculating and visualising various sport performance metrics (see methods of Activity and CompareActivities classes)
 * Support for mongodb import/export that can be used in combination with a Meteor.js app (will be added soon)
 
 
@@ -25,9 +25,13 @@ The *Velometria.py* library provides the following functionality:
 In order to be able to use Strava API the App must be registered at http://www.strava.com/developers
 It is easier than it sounds and typical registration settings will be:
 
+
 **Application Name:** *My Awesome App*
+
 **Website:** *myawesomeapp.com* (can be anything, even yout FB or Strava page will do)
+
 **Application Description** *Just fooling around with some Strava data*
+
 **Authorization Callback Domain** *127.0.0.1* (unless you are building a serious App)
 
 
@@ -71,6 +75,11 @@ Wrapper around the Authentication process is implemented in *strava/client.py* l
 }
 ```
 
+
+## Use cases
+
+The folder cases provides an example of App usage for visualizing and comparing two rides. The example is provided in iPython 
+(a.k.a. Jupyter) notebook
 
 ## Useful links
 

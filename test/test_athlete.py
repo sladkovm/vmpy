@@ -48,5 +48,11 @@ class TestAthleteConstructorWithNoInput(unittest.TestCase):
         mock_json_to_dict.assert_called_with(self.mock_athlete_json)
         self.assertEqual(test_athlete.current_athlete_dict, self.mock_athlete_dict)
 
+
+class TestAthleteConstructorWithAccessToken(unittest.TestCase):
+
+    def test(self):
+        pass
+
 if __name__ == '__main__':
     unittest.main()

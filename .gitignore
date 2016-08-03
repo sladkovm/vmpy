@@ -5,3 +5,6 @@
 # Explicit doctest files #
 ##########################
 /doc/*.doctest
+/cases/compare_garmin_vectors.py
+/cases/compare_rides.ipynb
+/cases/.ipynb_checkpoints/

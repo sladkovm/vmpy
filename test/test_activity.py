@@ -1,10 +1,11 @@
 import unittest, json
-from mock import patch, MagicMock
+from mock import patch, MagicMock, Mock
 from strava import client, athlete, activity
 
 class TestActivityInit(unittest.TestCase):
 
-    mock_athlete = '{}'
+    mock_athlete = Mock()
+    mock_athlete.__class__ = 'athlete.Athlete'
     mock_athlete_id = 227615
     mock_activity_id = '321934'
     mock_activity_summary_json = '{}'
@@ -30,6 +31,7 @@ class TestActivityInit(unittest.TestCase):
         test_activity = activity.Activity(self.mock_activity_id)
         # mock_class_Athlete.assert_called()
         self.assertEqual(test_activity.athlete, self.mock_athlete)
+        self.assertEqual(test_activity.athlete.__class__, 'athlete.Athlete')
 
     @patch.object(activity.Activity, '_retrieve_activity_streams', return_value=mock_activity_streams)
     @patch.object(activity.Activity, '_retrieve_activity_summary',
@@ -62,6 +64,26 @@ class TestActivityInit(unittest.TestCase):
         test_activity = activity.Activity(self.mock_activity_id)
         # mock_retrieve_activity_streams.assert_called_once()
         self.assertEqual(test_activity.streams, self.mock_activity_streams)
+
+
+class TestActivityMetrics(unittest.TestCase):
+
+    #TODO Find a way to mock the actual dict
+    mock_activity_id = '321934'
+    mock_activity_name = 'Evening Ride'
+
+    # Define mock for activity object
+    mock_activity = Mock()
+    mock_activity.__class__ = 'activity.Activity'
+    mock_activity.activity_id.return_value = mock_activity_id
+
+    # Define mock for athlete object
+    mock_athlete = Mock()
+    mock_athlete.__call__ = 'athlete.Athlete'
+
+    def test(self):
+        pass
+
 
 
 if (__name__=='__main__'):
