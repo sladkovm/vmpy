@@ -1,48 +1,98 @@
 import numpy as np
 from matplotlib import pyplot as plt
+
 from matplotlib.collections import LineCollection
 import matplotlib.colors as mcolors
 from matplotlib.colors import ListedColormap, BoundaryNorm
 from matplotlib import cm
 
-class SimpleStravaPlot(object):
 
-    @staticmethod
-    def plot_strava_analysis_simple(activity, **kwargs):
+class SimpleStravaPlot(object):
+    def __init__(self, activity, **kwargs):
+        self.title = kwargs.get('title', 'Strava analysis plot')
+        self.is_show = kwargs.get('is_show', True)
+        self.activity = activity
+        self.strava_plot = self.plot_strava_analysis_simple(title=self.title, is_show=self.is_show)  # tuple (f, axarr)
+
+    def plot_strava_analysis_simple(self, **kwargs):
         """Line2D plots of velocity_smooth, power, heartrate"""
         _style = kwargs.get('style', 'ggplot')
         plt.style.use(_style)
         _title = kwargs.get('title', 'Strava analysis plot')
+        _is_show = kwargs.get('is_show', True)
+
+        activity = self.activity
 
         _distance = activity.distance
         _speed = activity.speed
         _power = activity.power_ewma25
         _heartrate = activity.heartrate
         _altitude = activity.altitude
+        _cadence = activity.cadence
 
         f, axarr = plt.subplots(3, sharex=True)
 
+        # Speed/Cadence plot
         ax_speed = axarr[0]
-        ax_speed_bg = SimpleStravaPlot._add_elevation_background(ax_speed, _distance, _altitude,
-                                                                 ylabel='Altitude [m]')
-        ax_speed = SimpleStravaPlot._add_line_plot(ax_speed, _distance, _speed,
-                                                   ylabel='Speed [km/h]', title=_title)
+        ax_speed_bg = self._add_elevation_background(ax_speed, _distance, _altitude,
+                                                     ylabel='Altitude [m]')
+        _speedLabel = '[km/h] \n' \
+                      + 'Max {:02.0f} \n'.format(activity.activity_metrics.maxSpeed) \
+                      + 'Avg {:02.0f} \n'.format(activity.activity_metrics.avSpeed) \
+                      + 'Med {:02.0f} \n'.format(activity.activity_metrics.medSpeed)
+        ax_speed = self._add_line_plot(ax_speed, _distance, _speed,
+                                       ylabel=_speedLabel, title=_title)
+        speed_labels_arr = self._calc_tick_labels(_speed)
+        plt.setp(ax_speed, 'ylim', [speed_labels_arr[0], speed_labels_arr[-1]])
+        plt.setp(ax_speed, 'yticks', speed_labels_arr[1:3])
 
+        # Power plot
         ax_power = axarr[1]
-        ax_speed_bg = SimpleStravaPlot._add_elevation_background(ax_power, _distance, _altitude,
-                                                                 ylabel='Altitude [m]')
-        ax_power = SimpleStravaPlot._add_line_plot(ax_power, _distance, _power,
-                                                   ylabel='Power [Watts]')
+        ax_speed_bg = self._add_elevation_background(ax_power, _distance, _altitude)
+        _powerLabel = '[Watts] \n' \
+                      + 'Max {:03.0f} \n'.format(activity.activity_metrics.maxPower) \
+                      + 'Avg {:03.0f} \n'.format(activity.activity_metrics.avPower) \
+                      + 'NP {:03.0f}'.format(activity.activity_metrics.nPower)
+        ax_power = self._add_line_plot(ax_power, _distance, _power, ylabel=_powerLabel)
+        power_labels_arr = self._calc_tick_labels(_power, is_get_min=True)
+        plt.setp(ax_power, 'ylim', [power_labels_arr[0], speed_labels_arr[-1]])
+        plt.setp(ax_power, 'yticks', power_labels_arr[0:3])
 
+        # Heart Rate plot
         ax_heartrate = axarr[2]
-        ax_speed_bg = SimpleStravaPlot._add_elevation_background(ax_heartrate, _distance, _altitude,
-                                                                 ylabel='Altitude [m]')
-        ax_heartrate = SimpleStravaPlot._add_line_plot(ax_heartrate, _distance, _heartrate,
-                                                       xlabel='Distance [km]', ylabel='Heartrate [bpm]')
-        plt.show()
+        ax_speed_bg = self._add_elevation_background(ax_heartrate, _distance, _altitude)
+        _heartrateLabel = '[bpm] \n' \
+                          + 'Max {:03.0f} \n'.format(activity.activity_metrics.maxBPM) \
+                          + 'Avg {:03.0f} \n'.format(activity.activity_metrics.avBPM) \
+                          + 'Med {:03.0f} \n'.format(activity.activity_metrics.medBPM)
+        ax_heartrate = self._add_line_plot(ax_heartrate, _distance, _heartrate,
+                                           xlabel='Distance [km]',
+                                           ylabel=_heartrateLabel)
+        heartrate_labels_arr = self._calc_tick_labels(_heartrate, is_get_min=True)
+        plt.setp(ax_heartrate, 'ylim', [heartrate_labels_arr[0], heartrate_labels_arr[-1]])
+        plt.setp(ax_heartrate, 'yticks', heartrate_labels_arr[0:3])
 
-    @staticmethod
-    def _add_line_plot(axes, x, y, **kwargs):
+        # f.subplots_adjust(hspace=0)
+        # plt.setp([a.get_xticklabels() for a in f.axes[:-1]], visible=False)
+        if _is_show: plt.show()
+        return (f, axarr)
+
+    def _calc_tick_labels(self, stream, **kwargs):
+        is_get_min = kwargs.get('is_get_min', False)
+        # Calc stream ranges
+        min_stream = np.min(stream)
+        max_stream = np.max(stream)
+        # Calc stream ticks labels
+        if is_get_min:
+            min_stream_label = 10.0 * np.floor(min_stream / 10.0)
+        else:
+            min_stream_label = 0.0
+
+        max_stream_label = 10.0 * np.ceil(max_stream / 10.0)
+        mid_stream_label = (max_stream_label - min_stream_label) / 2.0 + min_stream_label
+        return [min_stream_label, mid_stream_label, max_stream_label]
+
+    def _add_line_plot(self, axes, x, y, **kwargs):
         xlabel = kwargs.get('xlabel', None)
         ylabel = kwargs.get('ylabel', None)
         title = kwargs.get('title', None)
@@ -50,20 +100,24 @@ class SimpleStravaPlot(object):
         if xlabel is not None:
             axes.set_xlabel(xlabel)
         if ylabel is not None:
-            axes.set_ylabel(ylabel)
+            axes.set_ylabel(ylabel, labelpad=40, rotation=0, y=1.0, verticalalignment='top')
         if title is not None:
-            axes.set_title(title)
+            axes.set_title(title, horizontalalignment='right')
         return axes
 
-    @staticmethod
-    def _add_elevation_background(axes, x, y, **kwargs):
+    def _add_elevation_background(self, axes, x, y, **kwargs):
         """ Elevation profile background """
         ylabel = kwargs.get('ylabel', None)
         _ax = axes.twinx()
-        _ax.fill_between(x, np.ones(y.shape)*np.min(y), y, facecolor='grey', alpha=0.5, linewidth=0.0)
+        _ax.fill_between(x, np.ones(y.shape) * np.min(y), y, facecolor='grey',
+                         alpha=0.5,
+                         linewidth=0.0)
         if ylabel is not None:
-            _ax.set_ylabel(ylabel)
+            _ax.set_ylabel(ylabel, rotation=0, y=1.3, horizontalalignment='right')
         _ax.gridOn = False
+        alt_labels_arr = self._calc_tick_labels(y, is_get_min=True)
+        plt.setp(_ax, 'ylim', [alt_labels_arr[0], alt_labels_arr[-1]])
+        plt.setp(_ax, 'yticks', alt_labels_arr[0:3])
         return _ax
 
 

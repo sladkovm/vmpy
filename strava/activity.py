@@ -32,6 +32,7 @@ class Activity():
         self.activity_dict = None
         (self.activity_json, self.activity_dict) = self._retrieve_activity_summary()
         self.streams = self._retrieve_activity_streams()
+        self.activity_metrics = ActivityMetrics(activity=self, athlete=self.athlete)
 
     def _init_athlete(self, _athlete):
         if (_athlete==None):
@@ -55,8 +56,6 @@ class Activity():
         _streams = streams.Streams(_activity_id, _athlete)
         return _streams
 
-        # ------- End of Activity class --------------
-
     # ----- Getter functions -------
 
     @property
@@ -77,14 +76,19 @@ class Activity():
         return _watts
 
     @property
+    def power30(self):
+        """Get power averaged over 30 sec"""
+        return np.convolve(self.watts, 30, mode='same')/30.0
+
+    @property
     def power10(self):
         """Get power averaged over 10 sec"""
-        return rolling_mean(self.watts, 10)
+        return np.convolve(self.watts, 10, mode='same')/10.0
 
     @property
     def power3(self):
         """Get power averaged over 3 sec"""
-        return rolling_mean(self.watts, 3)
+        return np.convolve(self.watts, 3, mode='same')/3.0
 
     @property
     def power_ewma25(self):
@@ -131,7 +135,8 @@ class Activity():
     def plot_strava_analysis_simple(self, **kwargs):
         """Plot Strava-like analysis plot for this activity"""
         _title = kwargs.get('title', 'Strava analysis plot')
-        vmplotlib.SimpleStravaPlot.plot_strava_analysis_simple(self, title=_title)
+        _is_show = kwargs.get('is_show', True)
+        vmplotlib.SimpleStravaPlot(self, title=_title, is_show=_is_show)
 
 # ====== Compare Activities class ============
 
@@ -232,7 +237,9 @@ class ActivityMetrics(object):
         self.CP = self.getCP()
         self.duration = self.getDuration(activity)
         self.nWorkCP = self.calc_nWorkCP()
+        self.maxPower = self.calc_maxPower(activity)
         self.avPower = self.calc_avPower(activity)
+        self.medPower = self.calc_medPower(activity)
         self.xPower = self.calc_xPower(activity)
         self.nPower = self.calc_nPower(activity)
         self.relIntensity = self.calc_relIntensity()
@@ -242,6 +249,12 @@ class ActivityMetrics(object):
         self.bikeScore = self.calc_bikeScore()
         self.TSS = self.calc_TSS()
         self.powerZones = self.calc_PowerZones()
+        self.avSpeed = self.calc_avSpeed(activity)
+        self.medSpeed = self.calc_medSpeed(activity)
+        self.maxSpeed = self.calc_maxSpeed(activity)
+        self.maxBPM = self.calc_maxBPM(activity)
+        self.avBPM = self.calc_avBPM(activity)
+        self.medBPM = self.calc_medBPM(activity)
 
     def getActivityId(self, activity):
         activityId = activity.activity_id
@@ -268,23 +281,24 @@ class ActivityMetrics(object):
         nWorkCP = self.CP * 3600
         return nWorkCP
 
+    def calc_maxPower(self, activity):
+        return np.max(activity.watts)
+
     def calc_avPower(self, activity):
-        avPower = np.mean(activity.streams.streams_dict_np['watts'])
+        avPower = np.mean(activity.power3)
         return avPower
 
+    def calc_medPower(self, activity):
+        return np.median(activity.watts)
+
     def calc_xPower(self, activity):
-        ewmaSpan = 25 # in seconds
-        power = activity.streams.streams_dict_np['watts']
-        ewmaPower = ewma(power, span=ewmaSpan)
-        xPower = np.mean(np.power(ewmaPower, 4))**(1.0/4)
+        power = activity.power_ewma25
+        xPower = np.mean(np.power(power, 4))**(1.0/4)
         return xPower
 
     def calc_nPower(self, activity):
-        CONV_LEN    = 30 # averaging over 30 sec
-        CONV_FILT   = np.ones(CONV_LEN)
-        power = activity.streams.streams_dict_np['watts']
-        convPower = np.convolve(power, CONV_FILT, mode='same')/CONV_LEN
-        nPower = np.mean(np.power(convPower, 4))**(1.0/4)
+        power = activity.power30
+        nPower = np.mean(np.power(power, 4))**(1.0/4)
         return nPower
 
     def calc_relIntensity(self):
@@ -311,6 +325,24 @@ class ActivityMetrics(object):
         TSS = (self.duration * self.nPower * self.IF)/(self.FTP*3600)*100
         return TSS
 
+    def calc_avSpeed(self, activity):
+        return np.mean(activity.speed)
+
+    def calc_maxSpeed(self, activity):
+        return np.max(activity.speed)
+
+    def calc_medSpeed(self, activity):
+        return np.median(activity.speed)
+
+    def calc_maxBPM(self, activity):
+        return np.max(activity.heartrate)
+
+    def calc_avBPM(self, activity):
+        return np.mean(activity.heartrate)
+
+    def calc_medBPM(self, activity):
+        return np.median(activity.heartrate)
+
     def printMetrics(self):
         print '\n'
         print 'Activity: %s' %(self.name)
@@ -321,11 +353,13 @@ class ActivityMetrics(object):
         ZLIMITS = np.array([0.56, 0.76, 0.91, 1.06, 1.21, 1.51])
         return ZLIMITS*self.FTP
 
-    # ------- End of ActivityMetrics class --------------
+        # ------- End of ActivityMetrics class --------------
+
 
 if (__name__=='__main__'):
     test_activity_id = '628508858' # mdd30
     test_athlete = athlete.Athlete()
     test_activity = Activity(test_activity_id)
     test_activity_metrics = ActivityMetrics(test_activity, test_athlete)
+    test_activity.plot_strava_analysis_simple(title='#mdd30', is_show=True)
 
