@@ -6,5 +6,5 @@
 ##########################
 /doc/*.doctest
 /cases/compare_garmin_vectors.py
-/cases/compare_rides.ipynb
+/cases/compare_maxim_roberto.ipynb
 /cases/.ipynb_checkpoints/
