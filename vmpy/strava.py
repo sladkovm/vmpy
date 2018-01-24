@@ -1,6 +1,6 @@
 """Very thin wrapper around the Strava API v3
 
-    STRAVA_ACCESS_TOKEN must be explicitely provided as an input
+    STRAVA_ACCESS_TOKEN must be explicitly provided as an input
 
     ALL returned values are python objects e.g. dict or list
 """
