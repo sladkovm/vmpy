@@ -9,6 +9,8 @@ def rolling_mean(stream, window, moving=None, **kwargs):
     :param window: int, Size of the moving window in sec
     :param moving (optional): array-like of boolean to mark samples to use
     :param value (optional): Value to use to fill moving=False, default=0.0
+    :param type (optional): str, type of averaging default="uniform", "ewma",
+    window is used as a span
     :return y: type of input argument
 
     The stream is expected to be sampled with 1 sec interval
@@ -23,7 +25,11 @@ def rolling_mean(stream, window, moving=None, **kwargs):
 
     # Moving average using pandas rolling_mean
     _s = pd.Series(_stream)
-    y = _s.rolling(window, min_periods=1).mean().values
+
+    if kwargs.get('type', 'uniform') == 'emwa':
+        y = _s.ewm(span=window, min_periods=1).mean().values
+    else:
+        y = _s.rolling(window, min_periods=1).mean().values
 
     # Cast the result into original type
     if type(stream) == list:
@@ -77,27 +83,28 @@ def best_interval(stream, window, moving=None, **kwargs):
 
     return rv
 
-#
-#
-# def calc_avPower(self, activity):
-#     avPower = np.mean(activity.power3)
-#     return avPower
-#
-#
-# def calc_medPower(self, activity):
-#     return np.median(activity.watts)
-#
-#
-# def calc_xPower(self, activity):
-#     power = activity.power_ewma25
-#     xPower = np.mean(np.power(power, 4)) ** (1.0 / 4)
-#     return xPower
-#
-#
-# def calc_nPower(self, activity):
-#     power = activity.power30
-#     nPower = np.mean(np.power(power, 4)) ** (1.0 / 4)
-#     return nPower
+
+def normalized_power(stream, moving=None, **kwargs):
+    """Normalized power
+
+    :param stream: array-like power stream
+    :param moving (optional): array-like moving bools
+    :param type (optional): str, default='NP', "xPower"
+    """
+
+    if kwargs.get('type', 'NP') == 'xPower':
+        _rolling_mean = rolling_mean(stream, window=25, moving=moving, type='emwa')
+    else:
+        _rolling_mean = rolling_mean(stream, window=30, moving=moving)
+
+    if type(_rolling_mean) == list:
+        _rolling_mean = np.asarray(_rolling_mean, dtype=np.float)
+
+    rv = np.mean(np.power(_rolling_mean, 4)) ** (1.0 / 4)
+
+    return rv
+
+
 #
 #
 # def calc_relIntensity(self):
