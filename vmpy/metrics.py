@@ -41,61 +41,33 @@ def normalized_power(stream, moving=None, **kwargs):
     return rv
 
 
-#
-#
-# def calc_relIntensity(self):
-#     relIntensity = self.xPower / self.CP
-#     return relIntensity
-#
-#
-# def calc_nWorkSession(self):
-#     nWorkSession = self.xPower * self.duration
-#     return nWorkSession
-#
-#
-# def calc_IF(self):
-#     IF = self.nPower / self.FTP
-#     return IF
-#
-#
-# def calc_rawBikeScore(self):
-#     rawBikeScore = self.relIntensity * self.nWorkSession
-#     return rawBikeScore
-#
-#
-# def calc_bikeScore(self):
-#     bikeScore = self.rawBikeScore / self.nWorkCP * 100
-#     return bikeScore
-#
-#
-# def calc_TSS(self):
-#     TSS = (self.duration * self.nPower * self.IF) / (self.FTP * 3600) * 100
-#     return TSS
-#
-#
-# def calc_avSpeed(self, activity):
-#     return np.mean(activity.speed)
-#
-#
-# def calc_maxSpeed(self, activity):
-#     return np.max(activity.speed)
-#
-#
-# def calc_medSpeed(self, activity):
-#     return np.median(activity.speed)
-#
-#
-# def calc_maxBPM(self, activity):
-#     return np.max(activity.heartrate)
-#
-#
-# def calc_avBPM(self, activity):
-#     return np.mean(activity.heartrate)
-#
-#
-# def calc_medBPM(self, activity):
-#     return np.median(activity.heartrate)
-#
+def relative_intensity(norm_power, threshold_power):
+    """Relative intensity
+
+    :param norm_power: NP or xPower
+    :param threshold_power: FTP or CP
+    :return float: IF or RI
+    """
+
+    return norm_power/threshold_power
+
+
+def stress_score(norm_power, threshold_power, duration):
+    """Stress Score
+
+    :param norm_power: NP or xPower
+    :param threshold_power: FTP or CP
+    :param duration: in seconds
+    :return ss: TSS or BikeScore
+    """
+
+    ri = relative_intensity(norm_power, threshold_power)
+
+    ss = (duration * norm_power * ri) \
+         / (threshold_power * 3600) * 100
+
+    return ss
+
 # def calc_PowerZones(self):
 #     ZLIMITS = np.array([0.56, 0.76, 0.91, 1.06, 1.21, 1.51])
 #     return ZLIMITS*self.FTP

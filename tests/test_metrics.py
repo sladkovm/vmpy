@@ -26,3 +26,20 @@ def test_normalized_power_xpower():
     moving = np.ones(30, dtype=bool)
 
     assert metrics.normalized_power(stream, moving, type='xPower') == 1
+
+
+def test_relative_intensity():
+
+    norm_power = 300.0
+    threshold_power = 300.0
+
+    assert metrics.relative_intensity(norm_power, threshold_power) == 1.0
+
+
+def test_stress_score():
+
+    norm_power = 300.0
+    threshold_power = 300.0
+    duration = 3600
+
+    assert metrics.stress_score(norm_power, threshold_power, duration) == 100.0
