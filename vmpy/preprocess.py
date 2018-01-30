@@ -1,3 +1,6 @@
+"""Implementation of help functions for data preprocessing
+Author: Maksym Sladkov"""
+
 import numpy as np
 import pandas as pd
 

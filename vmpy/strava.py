@@ -3,6 +3,8 @@
     STRAVA_ACCESS_TOKEN must be explicitly provided as an input
 
     ALL returned values are python objects e.g. dict or list
+
+    Author: Maksym Sladkov
 """
 import requests
 import json

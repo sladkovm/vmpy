@@ -1,3 +1,7 @@
+"""Implementation of Cycling Performance Metrics
+Author: Maksym Sladkov
+"""
+
 import numpy as np
 from vmpy.preprocess import rolling_mean
 
