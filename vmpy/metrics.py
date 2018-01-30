@@ -2,6 +2,9 @@ import numpy as np
 from vmpy.preprocess import rolling_mean
 
 
+POWER_ZONES_THRESHOLD = [0.55, 0.75, 0.90, 1.05, 1.20, 1.50]
+
+
 def best_interval(stream, window, moving=None, **kwargs):
     """Calculate best interval of the stream
 
@@ -67,7 +70,3 @@ def stress_score(norm_power, threshold_power, duration):
          / (threshold_power * 3600) * 100
 
     return ss
-
-# def calc_PowerZones(self):
-#     ZLIMITS = np.array([0.56, 0.76, 0.91, 1.06, 1.21, 1.51])
-#     return ZLIMITS*self.FTP
