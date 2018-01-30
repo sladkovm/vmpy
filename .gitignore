@@ -1,16 +1,7 @@
 
+dist/
 .idea/
 __pycache__/
 jupyter/
 .cache/
-# Strava client and athlete config #
-####################################
-/config/*.config
-
-# Explicit doctest files #
-##########################
-/doc/*.doctest
-/cases/compare_garmin_vectors.py
-/cases/compare_maxim_roberto.ipynb
-/cases/.ipynb_checkpoints/
-
+MANIFEST

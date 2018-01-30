@@ -1,19 +1,13 @@
 from distutils.core import setup
 
 setup(
-    name='VmPy',
+    name='vmpy',
     version='0.1.0',
     author='Maksym Sladkov',
     author_email='sladkovm@gmail.com',
     packages=['vmpy'],
-    url='http://pypi.python.org/pypi/VmPy/',
+    url='https://github.com/sladkovm/vmpy',
     license='LICENSE.txt',
     description='Velo Metrics implemented Python',
-    long_description=open('README.txt').read(),
-    install_requires=[
-        "numpy",
-        "pandas",
-        "requests",
-        "json"
-    ],
+
 )
