@@ -9,5 +9,5 @@ setup(
     url='https://github.com/sladkovm/vmpy',
     license='LICENSE.txt',
     description='Velo Metrics',
-
+    install_requires=['numpy', 'pandas', 'requests']
 )
