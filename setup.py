@@ -1,28 +1,19 @@
-import os
-from setuptools import setup, find_packages
-here = os.path.abspath(os.path.dirname(__file__))
+from distutils.core import setup
 
-install_requires = [
-    'numpy',
-    'pandas',
-    'logging',
-    'dateutils',
-    'matplotlib>=1.5',
-    'mlpy'
-    ]
-
-tests_require = [
-    'mock',
-    'nose',
-    ]
-
-setup(name='velometria',
-      version='0.1',
-      description='velometria',
-      packages=find_packages(),
-      include_package_data=True,
-      zip_safe=False,
-      install_requires=install_requires,
-      tests_require=tests_require,
-      test_suite="nose.collector",
-      )
+setup(
+    name='VmPy',
+    version='0.1.0',
+    author='Maksym Sladkov',
+    author_email='sladkovm@gmail.com',
+    packages=['vmpy'],
+    url='http://pypi.python.org/pypi/VmPy/',
+    license='LICENSE.txt',
+    description='Velo Metrics implemented Python',
+    long_description=open('README.txt').read(),
+    install_requires=[
+        "numpy",
+        "pandas",
+        "requests",
+        "json"
+    ],
+)
