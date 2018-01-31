@@ -4,4 +4,5 @@ dist/
 __pycache__/
 jupyter/
 .cache/
+vmpy.egg-info/
 MANIFEST
