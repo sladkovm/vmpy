@@ -1,4 +1,4 @@
-# import io
+import io
 import os
 import sys
 from shutil import rmtree
@@ -6,7 +6,7 @@ from setuptools import find_packages, setup, Command
 
 # Package meta-data.
 NAME = 'vmpy'
-DESCRIPTION = 'Velo Metrics'
+DESCRIPTION = 'Performance Velo Metrics Toolbox'
 URL = 'https://github.com/sladkovm/vmpy'
 EMAIL = 'sladkovm@gmail.com'
 AUTHOR = 'Maksym Sladkov'
@@ -24,7 +24,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 
 # Import the README and use it as the long-description.
 # Note: this will only work if 'README.rst' is present in your MANIFEST.in file!
-with io.open(os.path.join(here, 'README.txt'), encoding='utf-8') as f:
+with io.open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = '\n' + f.read()
 
 # Load the package's __version__.py module as a dictionary.
@@ -42,7 +42,7 @@ class UploadCommand(Command):
     @staticmethod
     def status(s):
         """Prints things in bold."""
-        print('\033[1m{0}\033[0m'.format(s))
+        print("\033[1m{0}\033[0m".format(s))
 
     def initialize_options(self):
         pass
@@ -52,15 +52,15 @@ class UploadCommand(Command):
 
     def run(self):
         try:
-            self.status('Removing previous builds…')
+            self.status("Removing previous builds")
             rmtree(os.path.join(here, 'dist'))
         except OSError:
             pass
 
-        self.status('Building Source and Wheel (universal) distribution…')
+        self.status("Building Source and Wheel (universal) distribution")
         os.system('{0} setup.py sdist bdist_wheel --universal'.format(sys.executable))
 
-        self.status('Uploading the package to PyPi via Twine…')
+        self.status("Uploading the package to PyPi via Twine")
         os.system('twine upload dist/*')
 
         sys.exit()
@@ -71,7 +71,7 @@ setup(
     name=NAME,
     version=about['__version__'],
     description=DESCRIPTION,
-    # long_description=long_description,
+    long_description=long_description,
     author=AUTHOR,
     author_email=EMAIL,
     url=URL,
