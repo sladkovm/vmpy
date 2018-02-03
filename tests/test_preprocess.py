@@ -98,20 +98,39 @@ def test_mask_filter_list_with_replacement():
 #     assert rv == test_stream['watts']
 #
 #
-# def test_hampel_filter():
-#
-#     stream = np.ones(60)
-#     stream[-1] = 2
-#
-#     assert (preprocess.hampel_filter(stream) == np.ones(60)).all()
-#
-#
-# def test_hampel_filter_with_replacement():
-#
-#     stream = np.ones(60)
-#     stream[-1] = 2
-#
-#     expected = np.ones(60)
-#     expected[-1] = 10
-#
-#     assert (preprocess.hampel_filter(stream, value=10) == expected).all()
+def test_hampel_filter():
+
+    stream = np.ones(60)
+    stream[-1] = 2
+
+    rv = preprocess.hampel_filter(stream)
+    assert type(rv) == np.ndarray
+    assert (rv == np.ones(60)).all()
+
+
+def test_hampel_filter_list():
+
+    stream = np.ones(60)
+    stream[-1] = 2
+    stream = stream.tolist()
+
+    expected = np.ones(60)
+    expected = expected.tolist()
+
+    rv = preprocess.hampel_filter(stream)
+
+    assert type(rv) == list
+    assert rv == expected
+
+
+def test_hampel_filter_with_replacement():
+
+    stream = np.ones(60)
+    stream[-1] = 2
+
+    expected = np.ones(60)
+    expected[-1] = 10
+
+    rv = preprocess.hampel_filter(stream, value=10) 
+
+    assert (rv == expected).all()

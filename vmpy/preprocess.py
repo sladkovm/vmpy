@@ -13,6 +13,9 @@ def mask_filter(arg, mask, **kwargs):
     :param mask: array-like of bools
     :param value (optional): value to use to fill moving=False, default=0.0
     :return y: type of input argument
+
+    In case the arg is an ndarray all operations will be performed on the original array.
+    To preserve original array pass a copy to the function
     """
 
     y, arg_type = to_ndarray(arg)
@@ -30,10 +33,10 @@ def mask_filter(arg, mask, **kwargs):
     return y
 
 
-def hampel_filter(stream, window=31, threshold=1, **kwargs):
+def hampel_filter(arg, window=31, threshold=1, **kwargs):
     """Detect outliers using Hampel filter and replace with rolling median or specified value
 
-    :param stream: array-like
+    :param arg: array-like
     :param window int: default=11, size of window (including the sample; 31 is equal to 15 on either side of value)
     :param threshold float: default=3 and corresponds to 2xSigma
     :param value float: default=None, will be replaced by rolling median value
@@ -41,31 +44,32 @@ def hampel_filter(stream, window=31, threshold=1, **kwargs):
 
     The factor 1.4826 makes the MAD scale estimate
     an unbiased estimate of the standard deviation for Gaussian data.
+
+    In case the arg is an ndarray all operations will be performed on the original array.
+    To preserve original array pass a copy to the function
     """
 
-    if type(stream) == np.ndarray:
-        _stream = stream.copy()
-    else:
-        _stream = np.array(stream)
+    y, arg_type = to_ndarray(arg)
 
-    y = pd.Series(_stream)
+    y_stream = pd.Series(y)
 
     #Hampel Filter
 
-    rolling_median = y.rolling(window, min_periods=1).median()
+    rolling_median = y_stream.rolling(window, min_periods=1).median()
 
-    difference = np.abs(y - rolling_median)
+    difference = np.abs(y_stream - rolling_median)
     median_abs_deviation = difference.rolling(window, min_periods=1).median()
 
     outlier_idx = difference > 1.4826 * threshold * median_abs_deviation
 
     value = kwargs.get('value', None)
     if value:
-        y[outlier_idx] = value
+        y_stream[outlier_idx] = value
     else:
-        y[outlier_idx] = rolling_median[outlier_idx]
+        y_stream[outlier_idx] = rolling_median[outlier_idx]
 
-    if type(stream) == list:
+    y = y_stream.as_matrix()
+    if arg_type == list:
         y = y.tolist()
 
     return y
