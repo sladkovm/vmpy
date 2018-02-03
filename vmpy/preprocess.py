@@ -6,12 +6,12 @@ import pandas as pd
 from vmpy.utils import to_ndarray
 
 
-def mask_filter(arg, mask, **kwargs):
-    """Fill mask=False with default=0 or specified by value
+def mask_filter(arg, mask, value=0.0, **kwargs):
+    """Replace masked values
 
     :param arg: array-like
     :param mask: array-like of bools
-    :param value (optional): value to use to fill moving=False, default=0.0
+    :param value: value to use for replacement, default=0.0
     :return y: type of input argument
 
     In case the arg is an ndarray all operations will be performed on the original array.
@@ -25,7 +25,7 @@ def mask_filter(arg, mask, **kwargs):
     else:
         ndmask = mask
 
-    y[~ndmask] = kwargs.get('value', 0.0)
+    y[~ndmask] = value
 
     if arg_type == list:
         y = y.tolist()
@@ -33,13 +33,13 @@ def mask_filter(arg, mask, **kwargs):
     return y
 
 
-def hampel_filter(arg, window=31, threshold=1, **kwargs):
+def hampel_filter(arg, window=31, threshold=1, value=None, **kwargs):
     """Detect outliers using Hampel filter and replace with rolling median or specified value
 
     :param arg: array-like
     :param window int: default=11, size of window (including the sample; 31 is equal to 15 on either side of value)
     :param threshold float: default=3 and corresponds to 2xSigma
-    :param value float: default=None, will be replaced by rolling median value
+    :param value float: if left to default=None, will be replaced by rolling median value
     :return y: type of input argument
 
     The factor 1.4826 makes the MAD scale estimate
@@ -53,22 +53,21 @@ def hampel_filter(arg, window=31, threshold=1, **kwargs):
 
     y_stream = pd.Series(y)
 
-    #Hampel Filter
-
     rolling_median = y_stream.rolling(window, min_periods=1).median()
 
     difference = np.abs(y_stream - rolling_median)
+
     median_abs_deviation = difference.rolling(window, min_periods=1).median()
 
     outlier_idx = difference > 1.4826 * threshold * median_abs_deviation
 
-    value = kwargs.get('value', None)
     if value:
         y_stream[outlier_idx] = value
     else:
         y_stream[outlier_idx] = rolling_median[outlier_idx]
 
     y = y_stream.as_matrix()
+
     if arg_type == list:
         y = y.tolist()
 

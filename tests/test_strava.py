@@ -2,7 +2,7 @@ from vmpy.strava import authorization_header
 from vmpy.strava import stream2dict
 
 
-def test_autorization_header():
+def test_authorization_header():
 
     access_token = 'abc123'
     expected = {'Authorization': 'Bearer abc123'}
