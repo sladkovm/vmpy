@@ -69,12 +69,12 @@ def rolling_mean(stream, window, mask=None, **kwargs):
     return y
 
 
-def hampel_filter(stream, window=11, threshold=3, **kwargs):
+def hampel_filter(stream, window=31, threshold=1, **kwargs):
     """Detect outliers using Hampel filter and replace with rolling median or specified value
 
     :param stream: array-like
-    :param window int: default=11, size of window (including the sample; 11 is equal to 5 on either side of value)
-    :param threshold float: default=3 and corresponds to 3xSigma
+    :param window int: default=11, size of window (including the sample; 31 is equal to 15 on either side of value)
+    :param threshold float: default=3 and corresponds to 2xSigma
     :param value float: default=None, will be replaced by rolling median value
     :return y: type of input argument
 
@@ -98,7 +98,11 @@ def hampel_filter(stream, window=11, threshold=3, **kwargs):
 
     outlier_idx = difference > 1.4826 * threshold * median_abs_deviation
 
-    y[outlier_idx] = rolling_median[outlier_idx]
+    value = kwargs.get('value', None)
+    if value:
+        y[outlier_idx] = value
+    else:
+        y[outlier_idx] = rolling_median[outlier_idx]
 
     if type(stream) == list:
         y = y.tolist()

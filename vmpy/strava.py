@@ -91,12 +91,13 @@ def retrieve_activity(activity_id, access_token):
 
 def retrieve_streams(activity_id, access_token, **kwargs):
     """Retrieve activity streams
-        API V3: https://strava.github.io/api/v3/streams/#activity
+    API V3: https://strava.github.io/api/v3/streams/#activity
 
-        :param activity_id: Activity ID -> int
-        :param access_token: Settings/My API Applications/Your Access Token -> str
-        :return streams: -> list
-        """
+    :param activity_id: Activity ID -> int
+    :param access_token: Settings/My API Applications/Your Access Token -> str
+    :param type: default=None, returns serialized original API response if set to 'original'
+    :return streams: -> list
+    """
 
     types = kwargs.get("types",
                        "time,latlng,distance,altitude,velocity_smooth,heartrate,cadence,watts,temp,moving,grade_smooth")
@@ -114,6 +115,10 @@ def retrieve_streams(activity_id, access_token, **kwargs):
 
         logger.error('Retrieve Streams Failed with a reason {}'.format(r.reason))
         streams = None
+
+    if streams and not kwargs.get('type', None):
+
+        streams = stream2dict(streams)
 
     return streams
 

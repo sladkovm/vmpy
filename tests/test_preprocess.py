@@ -89,7 +89,18 @@ def test_rolling_mean_real_data(test_stream):
 
 def test_hampel_filter():
 
-    stream = np.ones(25)
+    stream = np.ones(60)
     stream[-1] = 2
 
-    assert (preprocess.hampel_filter(stream) == np.ones(25)).all()
+    assert (preprocess.hampel_filter(stream) == np.ones(60)).all()
+
+
+def test_hampel_filter_with_replacement():
+
+    stream = np.ones(60)
+    stream[-1] = 2
+
+    expected = np.ones(60)
+    expected[-1] = 10
+
+    assert (preprocess.hampel_filter(stream, value=10) == expected).all()
