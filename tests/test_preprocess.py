@@ -31,7 +31,6 @@ def test_sanitize_stream_ndarray():
     assert (preprocess.sanitize_stream(stream, moving) == expected).all()
 
 
-
 def test_rolling_mean_list():
 
     stream = [1, 2, 3, 4, 5]
@@ -47,7 +46,7 @@ def test_rolling_mean_list_emwa():
 
     expected = list(np.ones(30))
 
-    assert preprocess.rolling_mean(stream, 2, type='emwa') == expected
+    assert preprocess.rolling_mean(stream, 2, type='ewma') == expected
 
 
 def test_rolling_mean_list_with_moving():

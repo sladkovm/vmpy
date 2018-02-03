@@ -57,7 +57,7 @@ def rolling_mean(stream, window, moving=None, **kwargs):
     # Moving average using pandas rolling_mean
     _s = pd.Series(_stream)
 
-    if kwargs.get('type', 'uniform') == 'emwa':
+    if kwargs.get('type', 'uniform') == 'ewma':
         y = _s.ewm(span=window, min_periods=1).mean().values
     else:
         y = _s.rolling(window, min_periods=1).mean().values
@@ -67,3 +67,15 @@ def rolling_mean(stream, window, moving=None, **kwargs):
         y = y.tolist()
 
     return y
+
+
+def remove_outliers(stream, moving=None, **kwargs):
+    """Remove outliers from the streams
+
+    :param stream: array-like
+    :param moving (optional): array-like of boolean to mark samples to use
+
+    :return y: type of input argument
+    """
+
+    pass

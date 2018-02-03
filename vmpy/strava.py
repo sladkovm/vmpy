@@ -38,6 +38,31 @@ def retrieve_athlete(access_token):
     return athlete
 
 
+def retrieve_zones(access_token, **kwargs):
+    """Retrieve Power and Heartrate zones
+    API V3: https://strava.github.io/api/v3/athlete/#zones
+
+    :param access_token: Settings/My API Applications/Your Access Token -> str
+    :return zones: -> dict
+    """
+
+    endpoint_url = "https://www.strava.com/api/v3/athlete/zones"
+
+    r = requests.get(endpoint_url,
+                     headers=authorization_header(access_token))
+
+    if r.ok:
+
+        zones = json.loads(r.text)
+
+    else:
+
+        logger.error('Retrieve Zones Failed with a reason {}'.format(r.reason))
+        zones = None
+
+    return zones
+
+
 def retrieve_activity(activity_id, access_token):
     """Retrieve a detailed representation of activity
     API V3: https://strava.github.io/api/v3/activities/#get-details
