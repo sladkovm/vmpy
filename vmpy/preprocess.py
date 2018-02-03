@@ -69,13 +69,38 @@ def rolling_mean(stream, window, mask=None, **kwargs):
     return y
 
 
-def remove_outliers(stream, mask=None, **kwargs):
-    """Remove outliers from the streams
+def hampel_filter(stream, window=11, threshold=3, **kwargs):
+    """Detect outliers using Hampel filter and replace with rolling median or specified value
 
     :param stream: array-like
-    :param mask (optional): array-like of boolean to mark samples to use
-
+    :param window int: default=11, size of window (including the sample; 11 is equal to 5 on either side of value)
+    :param threshold float: default=3 and corresponds to 3xSigma
+    :param value float: default=None, will be replaced by rolling median value
     :return y: type of input argument
+
+    The factor 1.4826 makes the MAD scale estimate
+    an unbiased estimate of the standard deviation for Gaussian data.
     """
 
-    pass
+    if type(stream) == np.ndarray:
+        _stream = stream.copy()
+    else:
+        _stream = np.array(stream)
+
+    y = pd.Series(_stream)
+
+    #Hampel Filter
+
+    rolling_median = y.rolling(window, min_periods=1).median()
+
+    difference = np.abs(y - rolling_median)
+    median_abs_deviation = difference.rolling(window, min_periods=1).median()
+
+    outlier_idx = difference > 1.4826 * threshold * median_abs_deviation
+
+    y[outlier_idx] = rolling_median[outlier_idx]
+
+    if type(stream) == list:
+        y = y.tolist()
+
+    return y

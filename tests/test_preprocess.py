@@ -85,3 +85,11 @@ def test_rolling_mean_real_data(test_stream):
 
     assert type(rv) == list
     assert rv == test_stream['watts']
+
+
+def test_hampel_filter():
+
+    stream = np.ones(25)
+    stream[-1] = 2
+
+    assert (preprocess.hampel_filter(stream) == np.ones(25)).all()
