@@ -28,3 +28,4 @@ Breaking changes:
 New features:
 
 - Humpel filter (rolling median with median replacement) for outlier replacements
+- Power and Heart Rate zones

@@ -8,8 +8,16 @@ from vmpy.preprocess import rolling_mean
 from vmpy.utils import to_ndarray
 
 
-RELATIVE_POWER_ZONES_THRESHOLD = [-0.001, 0.55, 0.75, 0.9, 1.05, 1.2, 1.5, 2.0, 10.0]
-HEART_RATE_ZONES = []
+# left bin-edge + 7-zones
+POWER_ZONES_THRESHOLD = [-0.001, 0.55, 0.75, 0.9, 1.05, 1.2, 1.5, 10.0]
+POWER_ZONES_THRESHOLD_DESC = ["Active Recovery", "Endurance", "Tempo",
+                              "Threshold", "VO2Max", "Anaerobic", "Neuromuscular",]
+POWER_ZONES_THRESHOLD_ZNAME = ["Z1", "Z2", "Z3", "Z4", "Z5", "Z6", "Z7"]
+
+# left bin-edge + 5-zones
+HEART_RATE_ZONES = [-0.001, 0.68, 0.83, 0.94, 1.05]
+HEART_RATE_ZONES_DESC = ["Active recovery", "Endurance", "Tempo", "Threshold", "VO2Max",]
+HEART_RATE_ZONES_ZNAME = ["Z1", "Z2", "Z3", "Z4", "Z5"]
 
 
 def best_interval(arg, window, mask=None, **kwargs):
@@ -32,10 +40,10 @@ def best_interval(arg, window, mask=None, **kwargs):
 
 
 def zones(arg, **kwargs):
-    """Convert stream to zones stream
+    """Convert watts/hr stream into respective zones stream
 
     :param arg: array-like
-    :return y: stream of zones, the same type as arg
+    :return y: array-like, the same type as arg
 
     Depending on the provided keywords, different zone will be calculated:
 
@@ -49,8 +57,9 @@ def zones(arg, **kwargs):
 
     if kwargs.get('ftp', None):
 
-        abs_zones = np.asarray(RELATIVE_POWER_ZONES_THRESHOLD) * kwargs.get('ftp')
-        labels = kwargs.get('labels', list(range(8)))
+        abs_zones = np.asarray(POWER_ZONES_THRESHOLD) * kwargs.get('ftp')
+
+        labels = kwargs.get('labels', list(range(1,8)))
         assert len(abs_zones) == (len(labels) + 1)
 
         y = pd.cut(arg_s, bins=abs_zones, labels=labels)

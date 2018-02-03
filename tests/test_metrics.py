@@ -14,8 +14,8 @@ def test_best_interval(test_rolling_mean):
 
 def test_zones_power_ftp_list():
 
-    stream = [0.55, 0.75, 0.9, 1.05, 1.2, 1.5, 2.0, 10.0]
-    expected = list(range(8))
+    stream = [0.55, 0.75, 0.9, 1.05, 1.2, 1.5, 10.0]
+    expected = list(range(1, 8))
 
     rv = metrics.zones(stream, ftp=1.0)
 
@@ -25,8 +25,8 @@ def test_zones_power_ftp_list():
 
 def test_zones_power_ftp_ndarray():
 
-    stream = np.asarray([0.55, 0.75, 0.9, 1.05, 1.2, 1.5, 2.0, 10.0])
-    expected = np.asarray(list(range(8)))
+    stream = np.asarray([0.55, 0.75, 0.9, 1.05, 1.2, 1.5, 10.0])
+    expected = np.asarray(list(range(1,8)))
 
     rv = metrics.zones(stream, ftp=1.0)
 
