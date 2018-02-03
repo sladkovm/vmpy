@@ -12,6 +12,28 @@ def test_best_interval(test_rolling_mean):
     assert metrics.best_interval(stream, 5) == 1
 
 
+def test_zones_power_ftp_list():
+
+    stream = [0.55, 0.75, 0.9, 1.05, 1.2, 1.5, 2.0, 10.0]
+    expected = list(range(8))
+
+    rv = metrics.zones(stream, ftp=1.0)
+
+    assert type(rv) == list
+    assert rv == expected
+
+
+def test_zones_power_ftp_ndarray():
+
+    stream = np.asarray([0.55, 0.75, 0.9, 1.05, 1.2, 1.5, 2.0, 10.0])
+    expected = np.asarray(list(range(8)))
+
+    rv = metrics.zones(stream, ftp=1.0)
+
+    assert type(rv) == np.ndarray
+    assert (rv == expected).all()
+
+
 def test_normalized_power():
 
     stream = np.ones(30)

@@ -3,28 +3,72 @@ Author: Maksym Sladkov
 """
 
 import numpy as np
+import pandas as pd
 from vmpy.preprocess import rolling_mean
+from vmpy.utils import to_ndarray
 
 
-POWER_ZONES_THRESHOLD = [0.55, 0.75, 0.90, 1.05, 1.20, 1.50]
+RELATIVE_POWER_ZONES_THRESHOLD = [-0.001, 0.55, 0.75, 0.9, 1.05, 1.2, 1.5, 2.0, 10.0]
+HEART_RATE_ZONES = []
 
 
-def best_interval(stream, window, moving=None, **kwargs):
+def best_interval(arg, window, mask=None, **kwargs):
     """Calculate best interval of the stream
 
-    :param stream: array-like
+    :param arg: array-like
     :param window: int, duration of the interval in seconds
-    :return best_interval: float
+    :param mask: array-like of bool
+    :return rv: float
     """
 
-    _stream = rolling_mean(stream, window=window, mask=moving, **kwargs)
+    y = rolling_mean(arg, window=window, mask=mask, **kwargs)
 
-    if type(_stream) == list:
-        _stream = np.asarray(_stream)
+    if type(y) == list:
+        y = np.asarray(y)
 
-    rv = _stream.max()
+    rv = y.max()
 
     return rv
+
+
+def zones(arg, **kwargs):
+    """Convert stream to zones stream
+
+    :param arg: array-like
+    :return y: stream of zones, the same type as arg
+
+    Depending on the provided keywords, different zone will be calculated:
+
+    ftp and (optional) relative_zones: classic threshold based 7-zones
+    lthr and (optional) relative zones: classic heartrate based 5-zones
+    """
+
+    arg_ndarray, arg_type = to_ndarray(arg)
+
+    arg_s = pd.Series(arg_ndarray)
+
+    if kwargs.get('ftp', None):
+
+        abs_zones = np.asarray(RELATIVE_POWER_ZONES_THRESHOLD) * kwargs.get('ftp')
+        labels = kwargs.get('labels', list(range(8)))
+        assert len(abs_zones) == (len(labels) + 1)
+
+        y = pd.cut(arg_s, bins=abs_zones, labels=labels)
+
+    elif kwargs.get('lthr', None):
+
+        # Calculate heartrate 5-zones
+        y = None
+
+    else:
+
+        y = None
+
+    y = y.as_matrix()
+    if arg_type == list:
+        y = y.tolist()
+
+    return y
 
 
 def normalized_power(stream, moving=None, **kwargs):
