@@ -17,7 +17,7 @@ def best_interval(stream, window, moving=None, **kwargs):
     :return best_interval: float
     """
 
-    _stream = rolling_mean(stream, window=window, moving=moving, **kwargs)
+    _stream = rolling_mean(stream, window=window, mask=moving, **kwargs)
 
     if type(_stream) == list:
         _stream = np.asarray(_stream)
@@ -36,9 +36,9 @@ def normalized_power(stream, moving=None, **kwargs):
     """
 
     if kwargs.get('type', 'NP') == 'xPower':
-        _rolling_mean = rolling_mean(stream, window=25, moving=moving, type='emwa')
+        _rolling_mean = rolling_mean(stream, window=25, mask=moving, type='emwa')
     else:
-        _rolling_mean = rolling_mean(stream, window=30, moving=moving)
+        _rolling_mean = rolling_mean(stream, window=30, mask=moving)
 
     if type(_rolling_mean) == list:
         _rolling_mean = np.asarray(_rolling_mean, dtype=np.float)
