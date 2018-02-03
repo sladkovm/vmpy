@@ -3,6 +3,7 @@ dist/
 build/
 .idea/
 __pycache__/
+.pytest_cache/
 jupyter/
 .cache/
 vmpy.egg-info/
