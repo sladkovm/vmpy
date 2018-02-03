@@ -95,11 +95,10 @@ def rolling_mean(stream, window, mask=None, **kwargs):
 
     y, type_stream = to_ndarray(stream)
 
-    if mask:
+    if mask is not None:
 
         y = mask_filter(y, mask, **kwargs)
 
-    # Moving average using pandas rolling_mean
     _s = pd.Series(y)
 
     if kwargs.get('type', 'uniform') == 'ewma':
@@ -107,7 +106,6 @@ def rolling_mean(stream, window, mask=None, **kwargs):
     else:
         y = _s.rolling(window, min_periods=1).mean().values
 
-    # Cast the result into original type
     if type_stream == list:
         y = y.tolist()
 
