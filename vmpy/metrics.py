@@ -57,7 +57,7 @@ def zones(arg, **kwargs):
 
     if kwargs.get('ftp', None):
 
-        abs_zones = np.asarray(POWER_ZONES_THRESHOLD) * kwargs.get('ftp')
+        abs_zones = np.asarray(POWER_ZONES_THRESHOLD) * float(kwargs.get('ftp'))
 
         labels = kwargs.get('labels', list(range(1,8)))
         assert len(abs_zones) == (len(labels) + 1)

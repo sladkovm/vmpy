@@ -11,7 +11,7 @@ or are the *nd-arrays*. This design choice favors easy integration into other pr
 e.g. `velometria.com <http://velometria.com>`_
 
 To help you getting started VMPY also provides a very thin wrapper around the
- `Strava API <https://strava.github.io/api/>`_.
+`Strava API <https://strava.github.io/api/>`_.
 
 Scope
 =====
@@ -42,7 +42,7 @@ http://www.strava.com/developers>`_:
 
 **Access Token**
 
-Your *Access Token* will be found at https://www.strava.com/settings/api
+The *Access Token* will be found at the `users profile page <https://www.strava.com/settings/api>`_
 It will look like this: *83ebeabdec09f6670863766f792ead24d61fe3f9*
 
 Access Token must be passed explicitly as an argument
