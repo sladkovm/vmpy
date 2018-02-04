@@ -139,6 +139,21 @@ def stream2dict(stream_list):
     return stream_dict
 
 
+def zones2list(zones, type="power"):
+    """Convert zones Strava response into a list
+
+    :param zones: dict, Strava API zones response
+    :param type: default="power", others "heart_rate"
+    :return y: list, zones boundaries with left edge set to -1 and right to 10000
+    """
+
+    y = list(map(lambda x: x['min'], zones[type]["zones"]))
+    y[0] = -1
+    y.append(10000)
+
+    return y
+
+
 def authorization_header(access_token):
     """Authorization header dict to be used with requests.get()
 
