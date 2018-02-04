@@ -38,6 +38,7 @@ def test_zones2list_power(test_zones):
     expected = [-1, 144, 196, 235, 274, 313, 391, 10000]
     assert rv == expected
 
+
 def test_zones2list_heart_rate(test_zones):
 
     rv = zones2list(test_zones, type="heart_rate")
