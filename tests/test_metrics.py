@@ -15,9 +15,20 @@ def test_best_interval(test_rolling_mean):
 def test_zones_power_ftp_list():
 
     stream = [0.55, 0.75, 0.9, 1.05, 1.2, 1.5, 10.0]
-    expected = list(range(1, 8))
+    expected = [1, 2, 3, 4, 5, 6, 7]
 
     rv = metrics.zones(stream, ftp=1.0)
+
+    assert type(rv) == list
+    assert rv == expected
+
+
+def test_zones_heart_rate_lthr_list():
+
+    stream = [0.6, 0.8, 0.9, 1.0, 1.1]
+    expected = [1, 2, 3, 4, 5]
+
+    rv = metrics.zones(stream, lthr=1.0)
 
     assert type(rv) == list
     assert rv == expected
@@ -29,6 +40,17 @@ def test_zones_power_explicit_zones_list():
     expected = [1, 2, 3, 4, 5, 6, 7]
 
     rv = metrics.zones(stream, zones=[-1, 144, 196, 235, 274, 313, 391, 10000])
+
+    assert type(rv) == list
+    assert rv == expected
+
+
+def test_zones_heart_rate_explicit_zones_list():
+
+    stream = [60, 120, 150, 160, 170, 180]
+    expected = [1, 1, 2, 3, 4, 5]
+
+    rv = metrics.zones(stream, zones=[-1, 142, 155, 162, 174, 10000])
 
     assert type(rv) == list
     assert rv == expected

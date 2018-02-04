@@ -16,7 +16,7 @@ POWER_ZONES_THRESHOLD_DESC = ["Active Recovery", "Endurance", "Tempo",
 POWER_ZONES_THRESHOLD_ZNAME = ["Z1", "Z2", "Z3", "Z4", "Z5", "Z6", "Z7"]
 
 # left bin-edge + 5-zones
-HEART_RATE_ZONES = [-0.001, 0.68, 0.83, 0.94, 1.05]
+HEART_RATE_ZONES = [-0.001, 0.68, 0.83, 0.94, 1.05, 10.0]
 HEART_RATE_ZONES_DESC = ["Active recovery", "Endurance", "Tempo", "Threshold", "VO2Max",]
 HEART_RATE_ZONES_ZNAME = ["Z1", "Z2", "Z3", "Z4", "Z5"]
 
@@ -44,46 +44,33 @@ def zones(arg, **kwargs):
     """Convert watts/hr stream into respective zones stream
 
     :param arg: array-like
+    :keyword "ftp", "lthr" or "zones": list
     :return y: array-like, the same type as arg
 
     Depending on the provided keywords, different zone will be calculated:
 
-    ftp and (optional) relative_zones: classic threshold based 7-zones
-    lthr and (optional) relative zones: classic heartrate based 5-zones
+    ftp: classic threshold based 7-zones
+    lthr: classic heartrate based 5-zones
+    zones: list of custom defined zones with left edge set to -1 and right edge to 10000
     """
 
     arg_ndarray, arg_type = to_ndarray(arg)
 
     arg_s = pd.Series(arg_ndarray)
 
-    if kwargs.get('ftp', None):
-
-        abs_zones = np.asarray(POWER_ZONES_THRESHOLD) * kwargs.get('ftp')
-        # logger.error('Power zones: {}'.format(abs_zones))
-
-        labels = kwargs.get('labels', list(range(1,8)))
-        # logger.error('Power zones labels: {}'.format(labels))
-        assert len(abs_zones) == (len(labels) + 1)
-
-        y = pd.cut(arg_s, bins=abs_zones, labels=labels)
-
-    elif kwargs.get('zones', None):
-
+    if kwargs.get('zones', None):
         abs_zones = kwargs.get('zones')
-
-        labels = kwargs.get('labels', list(range(1, 8)))
-        assert len(abs_zones) == (len(labels) + 1)
-
-        y = pd.cut(arg_s, bins=abs_zones, labels=labels)
-
+    elif kwargs.get('ftp', None):
+        abs_zones = np.asarray(POWER_ZONES_THRESHOLD) * kwargs.get('ftp')
     elif kwargs.get('lthr', None):
-
-        # Calculate heartrate 5-zones
-        y = None
-
+        abs_zones = np.asarray(HEART_RATE_ZONES) * kwargs.get('lthr')
     else:
+        raise ValueError
 
-        y = None
+    labels = kwargs.get('labels', list(range(1, len(abs_zones))))
+    assert len(abs_zones) == (len(labels) + 1)
+
+    y = pd.cut(arg_s, bins=abs_zones, labels=labels)
 
     y = y.as_matrix()
     if arg_type == list:
@@ -92,7 +79,7 @@ def zones(arg, **kwargs):
     return y
 
 
-def normalized_power(stream, moving=None, **kwargs):
+def normalized_power(stream, mask=None, **kwargs):
     """Normalized power
 
     :param stream: array-like power stream
@@ -101,9 +88,9 @@ def normalized_power(stream, moving=None, **kwargs):
     """
 
     if kwargs.get('type', 'NP') == 'xPower':
-        _rolling_mean = rolling_mean(stream, window=25, mask=moving, type='emwa')
+        _rolling_mean = rolling_mean(stream, window=25, mask=mask, type='emwa')
     else:
-        _rolling_mean = rolling_mean(stream, window=30, mask=moving)
+        _rolling_mean = rolling_mean(stream, window=30, mask=mask)
 
     if type(_rolling_mean) == list:
         _rolling_mean = np.asarray(_rolling_mean, dtype=np.float)
