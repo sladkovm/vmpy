@@ -67,6 +67,15 @@ def zones(arg, **kwargs):
 
         y = pd.cut(arg_s, bins=abs_zones, labels=labels)
 
+    elif kwargs.get('zones', None):
+
+        abs_zones = kwargs.get('zones')
+
+        labels = kwargs.get('labels', list(range(1, 8)))
+        assert len(abs_zones) == (len(labels) + 1)
+
+        y = pd.cut(arg_s, bins=abs_zones, labels=labels)
+
     elif kwargs.get('lthr', None):
 
         # Calculate heartrate 5-zones

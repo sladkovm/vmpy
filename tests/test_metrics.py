@@ -23,6 +23,17 @@ def test_zones_power_ftp_list():
     assert rv == expected
 
 
+def test_zones_power_explicit_zones_list():
+
+    stream = [1, 150, 210, 250, 300, 350, 450]
+    expected = [1, 2, 3, 4, 5, 6, 7]
+
+    rv = metrics.zones(stream, zones=[-1, 144, 196, 235, 274, 313, 391, 10000])
+
+    assert type(rv) == list
+    assert rv == expected
+
+
 def test_zones_power_ftp_list_of_int():
 
     stream = [1, 2,]
