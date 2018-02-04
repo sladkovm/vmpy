@@ -23,6 +23,18 @@ def test_zones_power_ftp_list():
     assert rv == expected
 
 
+def test_zones_power_ftp_list_of_int():
+
+    stream = [1, 2,]
+    ftp=1.0
+    expected = [4, 7,]
+
+    rv = metrics.zones(stream, ftp=ftp)
+
+    assert type(rv) == list
+    assert rv == expected
+
+
 def test_zones_power_ftp_ndarray():
 
     stream = np.asarray([0.55, 0.75, 0.9, 1.05, 1.2, 1.5, 10.0])
