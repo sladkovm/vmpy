@@ -58,11 +58,11 @@ def zones(arg, **kwargs):
 
     if kwargs.get('ftp', None):
 
-        abs_zones = np.asarray(POWER_ZONES_THRESHOLD, dtype=np.float32) * float(kwargs.get('ftp'))
-        logger.error('Power zones: {}'.format(abs_zones))
+        abs_zones = np.asarray(POWER_ZONES_THRESHOLD) * kwargs.get('ftp')
+        # logger.error('Power zones: {}'.format(abs_zones))
 
         labels = kwargs.get('labels', list(range(1,8)))
-        logger.error('Power zones labels: {}'.format(labels))
+        # logger.error('Power zones labels: {}'.format(labels))
         assert len(abs_zones) == (len(labels) + 1)
 
         y = pd.cut(arg_s, bins=abs_zones, labels=labels)

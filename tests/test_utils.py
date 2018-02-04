@@ -22,3 +22,25 @@ def test_to_ndarray_ndarray():
 
     assert rv_type == np.ndarray
     assert (rv_y == expected_y).all()
+
+
+def test_to_ndarray_real_stream(test_stream):
+
+    stream = test_stream['watts']
+
+    rv_y, rv_type = to_ndarray(stream)
+
+    assert rv_type == list
+    assert type(rv_y) == np.ndarray
+    assert rv_y.dtype != np.dtype('O')
+
+
+def test_to_ndarray_real_stream_mix_type(test_stream_with_nans):
+
+    stream = test_stream_with_nans['watts']
+
+    rv_y, rv_type = to_ndarray(stream)
+
+    assert rv_type == list
+    assert type(rv_y) == np.ndarray
+    assert rv_y.dtype != np.dtype('O')
