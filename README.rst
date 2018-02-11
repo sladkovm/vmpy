@@ -2,8 +2,9 @@
 VMPY - Performance Velo Metrics Toolbox
 =======================================
 
-**VMPY** toolbox focuses on providing a comprehensive collection of *typical*
-*Cycling Performance Metrics*.
+**VMPY** is a toolbox for evaluating *typical*
+*Cycling Performance Metrics* from the ride data e.g. power, heart-rate, velocity,
+gradient, cadence streams.
 
 All functions within the package do follow the convention, where input/output
 formats are either traditional *Python* built-in data structures
@@ -12,6 +13,19 @@ e.g. `velometria.com <http://velometria.com>`_
 
 To help you getting started VMPY also provides a very thin wrapper around the
 `Strava API <https://strava.github.io/api/>`_.
+
+
+Installation
+============
+
+Official release:
+
+``pip install vmpy``
+
+The bleeding edge work in progress:
+
+``pip install git+git://github.com/sladkovm/vmpy.git@development``
+
 
 Scope
 =====
@@ -23,6 +37,7 @@ The *VMPY* package provides the following functionality:
 ``preprocess.py``: Various clean-up tools e.g. handle moving=False and rolling means
 
 ``strava.py``: Python wrapper around the Strava API v3 for fetching Athletes, Activities and Stream data
+
 
 Quick Start
 ===========
@@ -47,6 +62,7 @@ It will look like this: *83ebeabdec09f6670863766f792ead24d61fe3f9*
 
 Access Token must be passed explicitly as an argument
 to the functions found in ``strava.py`` module
+
 
 Useful links
 ============
