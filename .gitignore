@@ -4,6 +4,7 @@ build/
 .idea/
 __pycache__/
 .pytest_cache/
+vmpy/.ipynb_checkpoints/
 jupyter/
 .cache/
 vmpy.egg-info/

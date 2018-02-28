@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.1.6 (unreleased)
+0.X.X (unreleased)
 ------------------
 
 Breaking changes:
@@ -11,6 +11,22 @@ Breaking changes:
 New features:
 
 - *add item here*
+
+Bug fixes:
+
+- *add item here*
+
+
+0.1.6 (in progress)
+------------------
+
+Breaking changes:
+
+- *add item here*
+
+New features:
+
+- Power Duration Curve
 
 Bug fixes:
 
