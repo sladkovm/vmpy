@@ -2,6 +2,19 @@ import numpy as np
 from vmpy import preprocess
 
 
+def test_mask_filter_mask_none():
+
+    stream = [1, 2, 3]
+    mask = None
+
+    expected = [1, 2, 3]
+
+    rv = preprocess.mask_filter(stream, mask)
+
+    assert type(rv) == list
+    assert rv == expected
+
+
 def test_mask_filter_list():
 
     stream = [1, 2, 3, 4, 5]

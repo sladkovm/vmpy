@@ -18,6 +18,9 @@ def mask_filter(arg, mask, value=0.0, **kwargs):
     To preserve original array pass a copy to the function
     """
 
+    if mask is None:
+        return arg
+
     y, arg_type = to_ndarray(arg)
 
     if type(mask) == list:
