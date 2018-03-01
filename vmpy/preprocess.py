@@ -2,10 +2,10 @@
 
 import numpy as np
 import pandas as pd
-from vmpy.utils import list_to_ndarray
+from vmpy.utils import cast_array_to_original_type
 
 
-def mask_filter(arg, mask=None, value=0.0, **kwargs):
+def mask_fill(arg, mask=None, value=0.0, **kwargs):
     """Replace masked values
 
     Parameters
@@ -28,19 +28,15 @@ def mask_filter(arg, mask=None, value=0.0, **kwargs):
     if mask is None:
         return arg
 
-    y, arg_type = list_to_ndarray(arg)
+    y = np.array(arg)
 
-    if type(mask) == list:
-        ndmask = np.asarray(mask, dtype=bool)
-    else:
-        ndmask = mask
+    mask = np.array(mask, dtype=bool)
+    y[~mask] = value
 
-    y[~ndmask] = value
+    # Cast to original type
+    rv = cast_array_to_original_type(y, type(arg))
 
-    if arg_type == list:
-        y = y.tolist()
-
-    return y
+    return rv
 
 
 def median_filter(arg, window=31, threshold=1, value=None, **kwargs):
@@ -65,10 +61,7 @@ def median_filter(arg, window=31, threshold=1, value=None, **kwargs):
     In case the arg is an ndarray all operations will be performed on the original array.
     To preserve original array pass a copy to the function
     """
-
-    y, arg_type = list_to_ndarray(arg)
-
-    y_stream = pd.Series(y)
+    y_stream = pd.Series(arg)
 
     rolling_median = y_stream.rolling(window, min_periods=1).median()
 
@@ -88,8 +81,7 @@ def median_filter(arg, window=31, threshold=1, value=None, **kwargs):
 
     y = y_stream.as_matrix()
 
-    if arg_type == list:
-        y = y.tolist()
+    y = cast_array_to_original_type(y, type(arg))
 
     return y
 
@@ -119,22 +111,17 @@ def rolling_mean(arg, window=10, mask=None, value=0.0, **kwargs):
     The moving array will indicate which samples to set to zero before
     applying rolling mean.
     """
-
-    y, type_stream = list_to_ndarray(arg)
-
     if mask is not None:
+        arg = mask_fill(arg, mask, value, **kwargs)
 
-        y = mask_filter(y, mask, value, **kwargs)
-
-    _s = pd.Series(y)
+    _s = pd.Series(arg)
 
     if kwargs.get('type', 'uniform') == 'ewma':
         y = _s.ewm(span=window, min_periods=1).mean().values
     else:
         y = _s.rolling(window, min_periods=1).mean().values
 
-    if type_stream == list:
-        y = y.tolist()
+    y = cast_array_to_original_type(y, type(arg))
 
     return y
 

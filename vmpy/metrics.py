@@ -3,7 +3,7 @@
 import numpy as np
 import pandas as pd
 from vmpy.preprocess import rolling_mean
-from vmpy.utils import list_to_ndarray
+from vmpy.utils import cast_array_to_original_type
 import logging
 logger = logging.getLogger(__name__)
 
@@ -71,16 +71,17 @@ def zones(arg, **kwargs):
     array-like, the same type as arg
     """
 
-    arg_ndarray, arg_type = list_to_ndarray(arg)
-
-    arg_s = pd.Series(arg_ndarray)
+    arg_s = pd.Series(arg)
 
     if kwargs.get('zones', None):
         abs_zones = kwargs.get('zones')
+
     elif kwargs.get('ftp', None):
         abs_zones = np.asarray(POWER_ZONES_THRESHOLD) * kwargs.get('ftp')
+
     elif kwargs.get('lthr', None):
         abs_zones = np.asarray(HEART_RATE_ZONES) * kwargs.get('lthr')
+
     else:
         raise ValueError
 
@@ -88,10 +89,7 @@ def zones(arg, **kwargs):
     assert len(abs_zones) == (len(labels) + 1)
 
     y = pd.cut(arg_s, bins=abs_zones, labels=labels)
-
-    y = y.as_matrix()
-    if arg_type == list:
-        y = y.tolist()
+    y = cast_array_to_original_type(y, type(arg))
 
     return y
 

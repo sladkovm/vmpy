@@ -9,7 +9,7 @@ def test_mask_filter_mask_none():
 
     expected = [1, 2, 3]
 
-    rv = preprocess.mask_filter(stream, mask)
+    rv = preprocess.mask_fill(stream, mask)
 
     assert type(rv) == list
     assert rv == expected
@@ -22,7 +22,7 @@ def test_mask_filter_list():
 
     expected = [1, 2, 0.0, 4, 5]
 
-    rv = preprocess.mask_filter(stream, mask)
+    rv = preprocess.mask_fill(stream, mask)
 
     assert type(rv) == list
     assert rv == expected
@@ -34,7 +34,7 @@ def test_mask_filter_ndarray():
     mask = np.asarray([True, True, False, True, True], dtype=bool)
 
     expected = np.asarray([1, 2, 0.0, 4, 5])
-    rv = preprocess.mask_filter(stream, mask)
+    rv = preprocess.mask_fill(stream, mask)
 
     assert type(rv) == np.ndarray
     assert (rv == expected).all()
@@ -47,7 +47,7 @@ def test_mask_filter_list_with_replacement():
 
     expected = [1, 2, 10.0, 4, 5]
 
-    rv = preprocess.mask_filter(stream, mask, value=10.0)
+    rv = preprocess.mask_fill(stream, mask, value=10.0)
 
     assert type(rv) == list
     assert rv == expected

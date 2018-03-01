@@ -8,8 +8,7 @@ Power Duration Model: also known as Mean Max Power model or simply a power curve
 
 Author: Maksym Sladkov
 """
-from vmpy.utils import list_to_ndarray
-from vmpy.preprocess import mask_filter
+from vmpy.preprocess import mask_fill
 import numpy as np
 import pandas as pd
 
@@ -35,22 +34,25 @@ def power_duration_curve(arg, mask=None, value=0.0, **kwargs):
         Power-Duration Curve
     """
 
-    y_filtered = mask_filter(arg, mask=mask, value=value)
+    y_filtered = mask_fill(arg, mask=mask, value=value)
+    ys = pd.Series(y_filtered)
 
-    y, arg_type = list_to_ndarray(y_filtered)
-
-    ys = pd.Series(y)
     energy = ys.cumsum()
     rv = np.array([])
     for t in np.arange(1, len(energy)):
         rv = np.append(rv, energy.diff(t).max()/(t))
 
+    # Cast to original type
+    arg_type = type(arg)
     if arg_type == list:
         rv = list(rv)
+
     elif arg_type == np.ndarray:
         rv = np.array(rv)
+
     elif arg_type == pd.Series:
         rv = pd.Series(rv)
+
     else:
         raise ValueError("arg_type must be list, ndarray or pd.Series")
 
