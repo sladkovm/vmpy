@@ -27,6 +27,8 @@ Breaking changes:
 New features:
 
 - Power Duration Curve
+- Time in zone (to-do)
+- Stress in zone (to-do)
 
 Bug fixes:
 
