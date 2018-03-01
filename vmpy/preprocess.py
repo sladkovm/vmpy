@@ -2,7 +2,7 @@
 
 import numpy as np
 import pandas as pd
-from vmpy.utils import to_ndarray
+from vmpy.utils import list_to_ndarray
 
 
 def mask_filter(arg, mask=None, value=0.0, **kwargs):
@@ -28,7 +28,7 @@ def mask_filter(arg, mask=None, value=0.0, **kwargs):
     if mask is None:
         return arg
 
-    y, arg_type = to_ndarray(arg)
+    y, arg_type = list_to_ndarray(arg)
 
     if type(mask) == list:
         ndmask = np.asarray(mask, dtype=bool)
@@ -66,7 +66,7 @@ def median_filter(arg, window=31, threshold=1, value=None, **kwargs):
     To preserve original array pass a copy to the function
     """
 
-    y, arg_type = to_ndarray(arg)
+    y, arg_type = list_to_ndarray(arg)
 
     y_stream = pd.Series(y)
 
@@ -120,7 +120,7 @@ def rolling_mean(arg, window=10, mask=None, value=0.0, **kwargs):
     applying rolling mean.
     """
 
-    y, type_stream = to_ndarray(arg)
+    y, type_stream = list_to_ndarray(arg)
 
     if mask is not None:
 

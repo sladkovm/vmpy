@@ -3,7 +3,7 @@
 import numpy as np
 import pandas as pd
 from vmpy.preprocess import rolling_mean
-from vmpy.utils import to_ndarray
+from vmpy.utils import list_to_ndarray
 import logging
 logger = logging.getLogger(__name__)
 
@@ -71,7 +71,7 @@ def zones(arg, **kwargs):
     array-like, the same type as arg
     """
 
-    arg_ndarray, arg_type = to_ndarray(arg)
+    arg_ndarray, arg_type = list_to_ndarray(arg)
 
     arg_s = pd.Series(arg_ndarray)
 
