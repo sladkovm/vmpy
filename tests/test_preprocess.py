@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from vmpy import preprocess
 
 
@@ -37,6 +38,18 @@ def test_mask_filter_ndarray():
     rv = preprocess.mask_fill(stream, mask)
 
     assert type(rv) == np.ndarray
+    assert (rv == expected).all()
+
+
+def test_mask_filter_series():
+
+    stream = pd.Series([1, 2, 3, 4, 5])
+    mask = pd.Series([True, True, False, True, True])
+
+    expected = pd.Series([1, 2, 0.0, 4, 5])
+    rv = preprocess.mask_fill(stream, mask)
+
+    assert type(rv) == pd.Series
     assert (rv == expected).all()
 
 

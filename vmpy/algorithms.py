@@ -9,6 +9,7 @@ Power Duration Model: also known as Mean Max Power model or simply a power curve
 Author: Maksym Sladkov
 """
 from vmpy.preprocess import mask_fill
+from vmpy.utils import cast_array_to_original_type
 import numpy as np
 import pandas as pd
 
@@ -17,7 +18,7 @@ def power_duration_curve(arg, mask=None, value=0.0, **kwargs):
     """Power-Duration Curve
 
     Compute power duration curve from the power stream. Mask-filter options can be
-    added using the keyword arguments
+    added using the keyword arguments.
 
     Parameters
     ----------
@@ -34,26 +35,18 @@ def power_duration_curve(arg, mask=None, value=0.0, **kwargs):
         Power-Duration Curve
     """
 
-    y_filtered = mask_fill(arg, mask=mask, value=value)
-    ys = pd.Series(y_filtered)
+    y = mask_fill(arg, mask=mask, value=value)
+    y = pd.Series(y)
 
-    energy = ys.cumsum()
-    rv = np.array([])
+    # Compute the accumulated energy from the power data
+    energy = y.cumsum()
+
+    # Compute the maximum sustainable power using the difference in energy
+    # This method is x4 faster than using rolling mean
+    y = np.array([])
     for t in np.arange(1, len(energy)):
-        rv = np.append(rv, energy.diff(t).max()/(t))
+        y = np.append(y, energy.diff(t).max()/(t))
 
-    # Cast to original type
-    arg_type = type(arg)
-    if arg_type == list:
-        rv = list(rv)
+    y = cast_array_to_original_type(y, type(arg))
 
-    elif arg_type == np.ndarray:
-        rv = np.array(rv)
-
-    elif arg_type == pd.Series:
-        rv = pd.Series(rv)
-
-    else:
-        raise ValueError("arg_type must be list, ndarray or pd.Series")
-
-    return rv
+    return y

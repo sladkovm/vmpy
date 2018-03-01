@@ -33,7 +33,6 @@ def mask_fill(arg, mask=None, value=0.0, **kwargs):
     mask = np.array(mask, dtype=bool)
     y[~mask] = value
 
-    # Cast to original type
     rv = cast_array_to_original_type(y, type(arg))
 
     return rv
@@ -61,11 +60,11 @@ def median_filter(arg, window=31, threshold=1, value=None, **kwargs):
     In case the arg is an ndarray all operations will be performed on the original array.
     To preserve original array pass a copy to the function
     """
-    y_stream = pd.Series(arg)
+    y = pd.Series(arg)
 
-    rolling_median = y_stream.rolling(window, min_periods=1).median()
+    rolling_median = y.rolling(window, min_periods=1).median()
 
-    difference = np.abs(y_stream - rolling_median)
+    difference = np.abs(y - rolling_median)
 
     median_abs_deviation = difference.rolling(window, min_periods=1).median()
 
@@ -75,11 +74,11 @@ def median_filter(arg, window=31, threshold=1, value=None, **kwargs):
     """
 
     if value:
-        y_stream[outlier_idx] = value
+        y[outlier_idx] = value
     else:
-        y_stream[outlier_idx] = rolling_median[outlier_idx]
+        y[outlier_idx] = rolling_median[outlier_idx]
 
-    y = y_stream.as_matrix()
+    y = y.as_matrix()
 
     y = cast_array_to_original_type(y, type(arg))
 
@@ -114,12 +113,12 @@ def rolling_mean(arg, window=10, mask=None, value=0.0, **kwargs):
     if mask is not None:
         arg = mask_fill(arg, mask, value, **kwargs)
 
-    _s = pd.Series(arg)
+    y = pd.Series(arg)
 
     if kwargs.get('type', 'uniform') == 'ewma':
-        y = _s.ewm(span=window, min_periods=1).mean().values
+        y = y.ewm(span=window, min_periods=1).mean().values
     else:
-        y = _s.rolling(window, min_periods=1).mean().values
+        y = y.rolling(window, min_periods=1).mean().values
 
     y = cast_array_to_original_type(y, type(arg))
 
