@@ -14,16 +14,29 @@ import numpy as np
 import pandas as pd
 
 
-def power_duration_curve(arg, **kwargs):
+def power_duration_curve(arg, mask=None, value=0.0, **kwargs):
+    """Power-Duration Curve
+
+    Compute power duration curve from the power stream. Mask-filter options can be
+    added using the keyword arguments
+
+    Parameters
+    ----------
+    arg : array-like
+        Power stream
+    mask: array-like, optional
+        Replacement mask (the default is None, which implies no masking)
+    value: number, optional
+        Value to use as a replacement (the default is 0.0)
+
+    Returns
+    -------
+    rv : type of input argument
+        Power-Duration Curve
     """
-    Returns a power-duration curve
 
-    :param arg: array-like
-    :return y: type of input argument
+    y_filtered = mask_filter(arg, mask=mask, value=value)
 
-    """
-
-    y_filtered = mask_filter(arg, mask=kwargs.get('mask', None), value=kwargs.get('value', 0.0))
     y, arg_type = to_ndarray(y_filtered)
 
     ys = pd.Series(y)

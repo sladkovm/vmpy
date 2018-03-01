@@ -3,8 +3,6 @@
     STRAVA_ACCESS_TOKEN must be explicitly provided as an input
 
     ALL returned values are python objects e.g. dict or list
-
-    Author: Maksym Sladkov
 """
 import requests
 import json
@@ -15,10 +13,17 @@ logger = logging.getLogger(__name__)
 
 def retrieve_athlete(access_token):
     """Retrieve current(authenticated) athlete
+
     API V3: https://strava.github.io/api/v3/athlete/#get-details
 
-    :param access_token: Settings/My API Applications/Your Access Token -> str
-    :return athlete: -> dict
+    Parameters
+    ----------
+    access_token : str
+        Settings/My API Applications/Your Access Token
+
+    Returns
+    -------
+    dict
     """
 
     endpoint_url = "https://www.strava.com/api/v3/athlete"
@@ -40,10 +45,17 @@ def retrieve_athlete(access_token):
 
 def retrieve_zones(access_token, **kwargs):
     """Retrieve Power and Heartrate zones
+
     API V3: https://strava.github.io/api/v3/athlete/#zones
 
-    :param access_token: Settings/My API Applications/Your Access Token -> str
-    :return zones: -> dict
+    Parameters
+    ----------
+    access_token : str
+        Settings/My API Applications/Your Access Token
+
+    Returns
+    -------
+    dict
     """
 
     endpoint_url = "https://www.strava.com/api/v3/athlete/zones"
@@ -65,11 +77,18 @@ def retrieve_zones(access_token, **kwargs):
 
 def retrieve_activity(activity_id, access_token):
     """Retrieve a detailed representation of activity
+
     API V3: https://strava.github.io/api/v3/activities/#get-details
 
-    :param activity_id: Activity ID -> int
-    :param access_token: Settings/My API Applications/Your Access Token -> str
-    :return activity: -> dict
+    Parameters
+    ----------
+    activity_id: int
+    access_token : str
+        Settings/My API Applications/Your Access Token
+
+    Returns
+    -------
+    dict
     """
 
     endpoint_url = "https://www.strava.com/api/v3/activities/{}".format(activity_id)
@@ -91,12 +110,21 @@ def retrieve_activity(activity_id, access_token):
 
 def retrieve_streams(activity_id, access_token, **kwargs):
     """Retrieve activity streams
+
     API V3: https://strava.github.io/api/v3/streams/#activity
 
-    :param activity_id: Activity ID -> int
-    :param access_token: Settings/My API Applications/Your Access Token -> str
-    :param type: default=None, returns serialized original API response if set to 'original'
-    :return streams: -> list
+    Parameters
+    ----------
+    activity_id : int
+    access_token : str
+        Settings/My API Applications/Your Access Token
+    type: {None, 'original'}
+        Returns serialized original API response if set to 'original'
+
+    Returns
+    -------
+    streams : list
+        Streams are the list of dicts
     """
 
     types = kwargs.get("types",
@@ -126,8 +154,16 @@ def retrieve_streams(activity_id, access_token, **kwargs):
 def stream2dict(stream_list):
     """Convert stream list into stream dict
 
-    :param stream_list: stream in list form, typical Strava API v3 response
-    :return stream_dict: stream in dict form, ready to be consumed by pandas
+    Parameters
+    ----------
+    stream_list : list
+        Stream in list form (list of dicts), as returned by Strava API v3
+
+    Returns
+    -------
+    stream_dict : dict
+        Stream in dict form, with key set to *stream name* and value set to the actual stream list.
+        In this form, the stream is ready to be consumed by pandas
     """
 
     stream_dict = {}
@@ -142,9 +178,16 @@ def stream2dict(stream_list):
 def zones2list(zones, type="power"):
     """Convert zones Strava response into a list
 
-    :param zones: dict, Strava API zones response
-    :param type: default="power", others "heart_rate"
-    :return y: list, zones boundaries with left edge set to -1 and right to 10000
+    Parameters
+    ----------
+    zones : dict
+        Strava API zones response
+    type : {"power", "heart_rate"}
+
+    Returns
+    -------
+    y : list
+        Zones boundaries with left edge set to -1 and right to 10000
     """
 
     y = list(map(lambda x: x['min'], zones[type]["zones"]))
@@ -157,8 +200,14 @@ def zones2list(zones, type="power"):
 def authorization_header(access_token):
     """Authorization header dict to be used with requests.get()
 
-    :param access_token: Settings/My API Applications/Your Access Token -> str
-    :return header: -> dict
+    Parameters
+    ----------
+    access_token : str
+        Settings/My API Applications/Your Access Token
+
+    Returns
+    -------
+    header : dict
     """
 
     rv = {'Authorization': 'Bearer {}'.format(access_token)}

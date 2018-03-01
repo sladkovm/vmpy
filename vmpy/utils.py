@@ -5,9 +5,16 @@ logger = logging.getLogger(__name__)
 def to_ndarray(arg, **kwargs):
     """Convert an array-like input into a ndarray
 
-    :param arg: array-like
-    :param value: default=0, a value to use for None replacement
-    :return y, type_arg: ndarray and type(arg)
+    Parameters
+    ----------
+    arg : array-like
+    value : number, optional
+        A value to use for None replacement, default=0
+
+    Returns
+    -------
+    y : ndarray
+    type_arg : type(arg)
     """
     type_arg = type(arg)
 

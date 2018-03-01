@@ -1,18 +1,25 @@
-"""Implementation of help functions for data preprocessing
-Author: Maksym Sladkov"""
+"""Preprocessing operations: masking, filtering, smoothing"""
 
 import numpy as np
 import pandas as pd
 from vmpy.utils import to_ndarray
 
 
-def mask_filter(arg, mask, value=0.0, **kwargs):
+def mask_filter(arg, mask=None, value=0.0, **kwargs):
     """Replace masked values
 
-    :param arg: array-like
-    :param mask: array-like of bools
-    :param value: value to use for replacement, default=0.0
-    :return y: type of input argument
+    Parameters
+    ----------
+    arg : array-like
+    mask : array-like of bools, optional
+        Default value is None, which means no masking will be applied
+    value : number, optional
+        Value to use for replacement, default=0.0
+
+    Returns
+    -------
+    y: type of input argument
+
 
     In case the arg is an ndarray all operations will be performed on the original array.
     To preserve original array pass a copy to the function
@@ -36,17 +43,24 @@ def mask_filter(arg, mask, value=0.0, **kwargs):
     return y
 
 
-def hampel_filter(arg, window=31, threshold=1, value=None, **kwargs):
-    """Detect outliers using Hampel filter and replace with rolling median or specified value
+def median_filter(arg, window=31, threshold=1, value=None, **kwargs):
+    """Outlier replacement using median filter
 
-    :param arg: array-like
-    :param window int: default=11, size of window (including the sample; 31 is equal to 15 on either side of value)
-    :param threshold float: default=3 and corresponds to 2xSigma
-    :param value float: if left to default=None, will be replaced by rolling median value
-    :return y: type of input argument
+    Detect outliers using median filter and replace with rolling median or specified value
 
-    The factor 1.4826 makes the MAD scale estimate
-    an unbiased estimate of the standard deviation for Gaussian data.
+    Parameters
+    ----------
+    arg : array-like
+    window : int, optional
+        Size of window (including the sample; default=31 is equal to 15 on either side of value)
+    threshold : number, optional
+        default=3 and corresponds to 2xSigma
+    value : float, optional
+        Value to be used for replacement, default=None, which means replacement by rolling median value
+
+    Returns
+    -------
+    y: type of input argument
 
     In case the arg is an ndarray all operations will be performed on the original array.
     To preserve original array pass a copy to the function
@@ -63,6 +77,9 @@ def hampel_filter(arg, window=31, threshold=1, value=None, **kwargs):
     median_abs_deviation = difference.rolling(window, min_periods=1).median()
 
     outlier_idx = difference > 1.4826 * threshold * median_abs_deviation
+    """ The factor 1.4826 makes the MAD scale estimate
+        an unbiased estimate of the standard deviation for Gaussian data.
+    """
 
     if value:
         y_stream[outlier_idx] = value
@@ -77,29 +94,37 @@ def hampel_filter(arg, window=31, threshold=1, value=None, **kwargs):
     return y
 
 
-def rolling_mean(stream, window, mask=None, **kwargs):
-    """Rolling mean (default=10 sec) of the stream
+def rolling_mean(arg, window=10, mask=None, value=0.0, **kwargs):
+    """Compute rolling mean
 
-    :param stream: array-like
-    :param window: int, Size of the moving window in sec
-    :param mask (optional): array-like of boolean to mark samples to use
-    :param value (optional): Value to use to fill mask=False, default=0.0
-    :param type (optional): str, type of averaging default="uniform", "ewma",
-    window is used as a span
-    :return y: type of input argument
+    Compute *uniform* or *ewma* rolling mean of the stream. In-process masking with replacement is
+    controlled by optional keyword parameters
 
-    The stream is expected to be sampled with 1 sec interval
-    and is treated as a time series.
+    Parameters
+    ----------
+    arg : array-like
+    window : int
+        Size of the moving window in sec, default=10
+    mask : array-like of boolean, optional
+        Default value is None, which means no masking will be applied
+    value : number, optional
+        Value to use for replacement, default=0.0
+    type : {"uniform", "emwa"}, optional
+        Type of averaging, default="uniform"
+
+    Returns
+    -------
+    y: type of input argument
 
     The moving array will indicate which samples to set to zero before
     applying rolling mean.
     """
 
-    y, type_stream = to_ndarray(stream)
+    y, type_stream = to_ndarray(arg)
 
     if mask is not None:
 
-        y = mask_filter(y, mask, **kwargs)
+        y = mask_filter(y, mask, value, **kwargs)
 
     _s = pd.Series(y)
 

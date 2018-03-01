@@ -22,7 +22,8 @@ Bug fixes:
 
 Breaking changes:
 
-- *add item here*
+- NumPy Style Python Docstrings
+  (https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt)
 
 New features:
 

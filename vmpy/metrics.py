@@ -1,6 +1,4 @@
-"""Implementation of Cycling Performance Metrics
-Author: Maksym Sladkov
-"""
+"""Cycling Performance Metrics"""
 
 import numpy as np
 import pandas as pd
@@ -9,28 +7,39 @@ from vmpy.utils import to_ndarray
 import logging
 logger = logging.getLogger(__name__)
 
-# left bin-edge + 7-zones
+# FTP based 7-zones with left bind edge set to -0.001
 POWER_ZONES_THRESHOLD = [-0.001, 0.55, 0.75, 0.9, 1.05, 1.2, 1.5, 10.0]
 POWER_ZONES_THRESHOLD_DESC = ["Active Recovery", "Endurance", "Tempo",
                               "Threshold", "VO2Max", "Anaerobic", "Neuromuscular",]
 POWER_ZONES_THRESHOLD_ZNAME = ["Z1", "Z2", "Z3", "Z4", "Z5", "Z6", "Z7"]
 
-# left bin-edge + 5-zones
+# LTHR based 5-zones with left bind edge set to -0.001
 HEART_RATE_ZONES = [-0.001, 0.68, 0.83, 0.94, 1.05, 10.0]
 HEART_RATE_ZONES_DESC = ["Active recovery", "Endurance", "Tempo", "Threshold", "VO2Max",]
 HEART_RATE_ZONES_ZNAME = ["Z1", "Z2", "Z3", "Z4", "Z5"]
 
 
-def best_interval(arg, window, mask=None, **kwargs):
-    """Calculate best interval of the stream
+def best_interval(arg, window, mask=None, value=0.0, **kwargs):
+    """Compute best interval of the stream
 
-    :param arg: array-like
-    :param window: int, duration of the interval in seconds
-    :param mask: array-like of bool
-    :return rv: float
+    Masking with replacement is controlled by keyword arguments
+
+    Parameters
+    ----------
+    arg: array-like
+    window: int
+        Duration of the interval in seconds
+    mask: array-like of bool, optional
+        default=None, which means no masking
+    value : number, optional
+        Value to use for replacement, default=0.0
+
+    Returns
+    -------
+    float
     """
 
-    y = rolling_mean(arg, window=window, mask=mask, **kwargs)
+    y = rolling_mean(arg, window=window, mask=mask, value=value, **kwargs)
 
     if type(y) == list:
         y = np.asarray(y)
@@ -41,17 +50,25 @@ def best_interval(arg, window, mask=None, **kwargs):
 
 
 def zones(arg, **kwargs):
-    """Convert watts/hr stream into respective zones stream
+    """Convert stream into respective zones stream
 
-    :param arg: array-like
-    :keyword "ftp", "lthr" or "zones": list
-    :return y: array-like, the same type as arg
+    Watts streams can be converted either into ftp based 7-zones or into custom zones
+    HR streams can be converted either in lthr based 5-zones or into custom zones
+    One of three *ftp*, *lthr* or *zone* keyword parameters must be provided
 
-    Depending on the provided keywords, different zone will be calculated:
+    Parameters
+    ----------
+    arg : array-like
+    ftp : number, optional
+        Value for FTP, will be used for 7-zones calculation
+    lthr: number, optional
+        Value for LTHR, will be used for 5-zones calculation
+    zones: list, optional
+        List of custom defined zones with left edge set to -1 and right edge to 10000
 
-    ftp: classic threshold based 7-zones
-    lthr: classic heartrate based 5-zones
-    zones: list of custom defined zones with left edge set to -1 and right edge to 10000
+    Returns
+    -------
+    array-like, the same type as arg
     """
 
     arg_ndarray, arg_type = to_ndarray(arg)
@@ -79,18 +96,30 @@ def zones(arg, **kwargs):
     return y
 
 
-def normalized_power(stream, mask=None, **kwargs):
+def normalized_power(arg, mask=None, value=0.0, **kwargs):
     """Normalized power
 
-    :param stream: array-like power stream
-    :param moving (optional): array-like moving bools
-    :param type (optional): str, default='NP', "xPower"
+    Parameters
+    ----------
+    arg : array-like
+        Power stream
+    mask: array-like of bool, optional
+        default=None, which means no masking
+    value : number, optional
+        Value to use for replacement, default=0.0
+    type : {"xPower", "NP}
+        Determines calculation method to use, default='xPower'
+
+
+    Returns
+    -------
+    number
     """
 
     if kwargs.get('type', 'NP') == 'xPower':
-        _rolling_mean = rolling_mean(stream, window=25, mask=mask, type='emwa')
+        _rolling_mean = rolling_mean(arg, window=25, mask=mask, value=value, type='emwa')
     else:
-        _rolling_mean = rolling_mean(stream, window=30, mask=mask)
+        _rolling_mean = rolling_mean(arg, window=30, mask=mask, value=value)
 
     if type(_rolling_mean) == list:
         _rolling_mean = np.asarray(_rolling_mean, dtype=np.float)
@@ -103,21 +132,41 @@ def normalized_power(stream, mask=None, **kwargs):
 def relative_intensity(norm_power, threshold_power):
     """Relative intensity
 
-    :param norm_power: NP or xPower
-    :param threshold_power: FTP or CP
-    :return float: IF or RI
+    Parameters
+    ----------
+    norm_power : number
+        NP or xPower
+    threshold_power : number
+        FTP or CP
+
+    Returns
+    -------
+    float
+        IF or RI
     """
 
-    return norm_power/threshold_power
+    rv = norm_power/threshold_power
+
+    return rv
 
 
 def stress_score(norm_power, threshold_power, duration):
     """Stress Score
 
-    :param norm_power: NP or xPower
-    :param threshold_power: FTP or CP
-    :param duration: in seconds
-    :return ss: TSS or BikeScore
+    Parameters
+    ----------
+    norm_power : number
+        NP or xPower
+    threshold_power : number
+        FTP or CP
+    duration : int
+        Duration in seconds
+
+
+    Returns
+    -------
+    ss:
+        TSS or BikeScore
     """
 
     ri = relative_intensity(norm_power, threshold_power)
