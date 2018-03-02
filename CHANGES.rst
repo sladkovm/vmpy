@@ -17,6 +17,22 @@ Bug fixes:
 - *add item here*
 
 
+0.1.7 (in progress)
+------------------
+
+Breaking changes:
+
+- *add item here*
+
+New features:
+
+- Stress in zone
+
+Bug fixes:
+
+- *add item here*
+
+
 0.1.6 (2018-03-02)
 ------------------
 
