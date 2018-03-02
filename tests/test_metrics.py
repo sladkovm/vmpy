@@ -13,96 +13,17 @@ def test_best_interval(test_rolling_mean):
     assert metrics.best_interval(stream, 5) == 1
 
 
-@mock.patch('vmpy.metrics.compute_zones')
-def test_time_in_zones(tz):
+@mock.patch('vmpy.streams.compute_zones')
+def test_time_in_zones(zones):
 
     power = [0.55, 0.75, 0.9, 1.05, 1.2, 1.5, 10.0]
-    tz.return_value = [1,2,3,4,5,6,7]
+    zones.return_value = [1,2,3,4,5,6,7]
 
     rv = metrics.time_in_zones(power, ftp=1.0)
     expected = [1, 1, 1, 1, 1, 1, 1]
 
     assert type(rv) == list
     assert rv == expected
-
-
-def test_zones_power_ftp_list():
-
-    stream = [0.55, 0.75, 0.9, 1.05, 1.2, 1.5, 10.0]
-    expected = [1, 2, 3, 4, 5, 6, 7]
-
-    rv = metrics.compute_zones(stream, ftp=1.0)
-
-    assert type(rv) == list
-    assert rv == expected
-
-
-def test_zones_heart_rate_lthr_list():
-
-    stream = [0.6, 0.8, 0.9, 1.0, 1.1]
-    expected = [1, 2, 3, 4, 5]
-
-    rv = metrics.compute_zones(stream, lthr=1.0)
-
-    assert type(rv) == list
-    assert rv == expected
-
-
-def test_zones_power_explicit_zones_list():
-
-    stream = [1, 150, 210, 250, 300, 350, 450]
-    expected = [1, 2, 3, 4, 5, 6, 7]
-
-    rv = metrics.compute_zones(stream, zones=[-1, 144, 196, 235, 274, 313, 391, 10000])
-
-    assert type(rv) == list
-    assert rv == expected
-
-
-def test_zones_heart_rate_explicit_zones_list():
-
-    stream = [60, 120, 150, 160, 170, 180]
-    expected = [1, 1, 2, 3, 4, 5]
-
-    rv = metrics.compute_zones(stream, zones=[-1, 142, 155, 162, 174, 10000])
-
-    assert type(rv) == list
-    assert rv == expected
-
-
-def test_zones_power_ftp_list_of_int():
-
-    stream = [1, 2,]
-    ftp=1.0
-    expected = [4, 7,]
-
-    rv = metrics.compute_zones(stream, ftp=ftp)
-
-    assert type(rv) == list
-    assert rv == expected
-
-
-def test_zones_power_ftp_unordered_list():
-
-    stream = [2, 1, 3]
-    ftp=1.0
-    expected = [7, 4, 7,]
-
-    rv = metrics.compute_zones(stream, ftp=ftp)
-
-    assert type(rv) == list
-    assert rv == expected
-
-
-def test_zones_power_ftp_ndarray():
-
-    stream = np.asarray([0.55, 0.75, 0.9, 1.05, 1.2, 1.5, 10.0])
-    expected = np.asarray(list(range(1,8)))
-
-    rv = metrics.compute_zones(stream, ftp=1.0)
-
-    assert type(rv) == np.ndarray
-    assert (rv == expected).all()
 
 
 def test_normalized_power():
