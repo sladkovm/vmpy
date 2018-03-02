@@ -17,7 +17,7 @@ Bug fixes:
 - *add item here*
 
 
-0.1.6 (in progress)
+0.1.6 (2018-03-02)
 ------------------
 
 Breaking changes:
