@@ -4,27 +4,6 @@ from unittest import mock
 from vmpy import metrics
 
 
-def test_wpk():
-
-    power = [1,2,3]
-    weight = 2
-
-    rv = metrics.wpk(power, weight)
-    expected = [0.5,1.0,1.5]
-    assert type(rv) == list
-    assert rv == expected
-
-    rv = metrics.wpk(np.array(power), weight)
-    expected = np.array([0.5, 1.0, 1.5])
-    assert type(rv) == np.ndarray
-    assert (rv == expected).all()
-
-    rv = metrics.wpk(pd.Series(power), weight)
-    expected = pd.Series([0.5, 1.0, 1.5])
-    assert type(rv) == pd.Series
-    assert (rv == expected).all()
-
-
 @mock.patch('vmpy.metrics.rolling_mean')
 def test_best_interval(test_rolling_mean):
 

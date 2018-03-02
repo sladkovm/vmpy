@@ -1,8 +1,7 @@
-"""Cycling Performance Metrics"""
+"""Calculation of performance metrics that change the shape of stream"""
 
 import numpy as np
 import pandas as pd
-from collections import namedtuple
 from vmpy.streams import rolling_mean, mask_fill
 from vmpy.utils import cast_array_to_original_type
 import logging
@@ -56,28 +55,6 @@ def power_duration_curve(arg, mask=None, value=0.0, **kwargs):
     y = cast_array_to_original_type(y, type(arg))
 
     return y
-
-
-
-def wpk(power, weight):
-    """Watts per kilo
-
-    Parameters
-    ----------
-    power : list, ndarray, series
-    weight : number
-
-    Returns
-    -------
-    array-like
-    """
-
-    rv = pd.Series(power, dtype=float)/ weight
-    rv = cast_array_to_original_type(rv, type(power))
-
-    return rv
-
-
 
 def best_interval(arg, window, mask=None, value=0.0, **kwargs):
     """Compute best interval of the stream

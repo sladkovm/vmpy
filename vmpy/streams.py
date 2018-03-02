@@ -5,6 +5,25 @@ import pandas as pd
 from vmpy.utils import cast_array_to_original_type
 
 
+def wpk(power, weight):
+    """Watts per kilo
+
+    Parameters
+    ----------
+    power : list, ndarray, series
+    weight : number
+
+    Returns
+    -------
+    array-like
+    """
+
+    rv = pd.Series(power, dtype=float)/ weight
+    rv = cast_array_to_original_type(rv, type(power))
+
+    return rv
+
+
 def mask_fill(arg, mask=None, value=0.0, **kwargs):
     """Replace masked values
 
