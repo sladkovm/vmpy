@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd
+from collections import namedtuple
 from vmpy.preprocess import rolling_mean, mask_fill
 from vmpy.utils import cast_array_to_original_type
 import logging
@@ -47,9 +48,9 @@ def best_interval(arg, window, mask=None, value=0.0, **kwargs):
     Parameters
     ----------
     arg: array-like
-    window: int
+    window : int
         Duration of the interval in seconds
-    mask: array-like of bool, optional
+    mask : array-like of bool, optional
         default=None, which means no masking
     value : number, optional
         Value to use for replacement, default=0.0
@@ -64,14 +65,6 @@ def best_interval(arg, window, mask=None, value=0.0, **kwargs):
     rv = np.max(y)
 
     return rv
-
-
-def best_repeated_intervals(arg, window, mask=None, value=0.0, **kwargs):
-    """Compute best repeated intervals"""
-
-    y = rolling_mean(arg, window=window, mask=mask, value=value, **kwargs)
-
-    pass
 
 
 def zones(arg, **kwargs):
@@ -93,7 +86,7 @@ def zones(arg, **kwargs):
 
     Returns
     -------
-    array-like, the same type as arg
+    array-like of int, the same type as arg
     """
 
     arg_s = pd.Series(arg)

@@ -3,6 +3,16 @@ import pandas as pd
 from vmpy.algorithms import power_duration_curve
 
 
+def test_power_duration_curve():
+
+    power = np.arange(101)
+    rv = power_duration_curve(power)
+
+    assert type(power) == np.ndarray
+    assert rv[0] == 100.0
+    assert rv[49] == 75.5
+    assert rv[-1] == 50.5
+
 def test_power_duration_curve_list():
 
     stream = [0, 0, 0]

@@ -22,11 +22,12 @@ Bug fixes:
 
 Breaking changes:
 
-- NumPy Style Python Docstrings
-  (https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt)
+- *add item here*
 
 New features:
 
+- NumPy Style Python Docstrings
+  (https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt)
 - Power Duration Curve
 - WPK calculations on array-like
 - Time in zone (to-do)
