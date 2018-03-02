@@ -90,8 +90,14 @@ setup(
         # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Operating System :: OS Independent',
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Developers',
+        'Intended Audience :: Education',
+        'Intended Audience :: Healthcare Industry',
+        'Intended Audience :: Science/Research',
+        'Topic :: Scientific/Engineering',
     ],
     # $ setup.py publish support.
     cmdclass={
