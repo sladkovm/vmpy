@@ -47,6 +47,546 @@ Usage
 
 
 >>> from vmpy import metrics
+>>> power_zones = metrics.compute_zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.hampel_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.compute_zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.hampel_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.compute_zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.hampel_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.compute_zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.hampel_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.compute_zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.hampel_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.compute_zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.hampel_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.compute_zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.hampel_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.compute_zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.hampel_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.compute_zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.hampel_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.compute_zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.hampel_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.compute_zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.hampel_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.compute_zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.median_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
+>>> power_zones = metrics.zones(stream['watts'], ftp=270)
+>>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
+>>> best_1min = metrics.best_interval(stream['watts'], window=60)
+
+
+>>> from vmpy import preprocess
+>>> watts_3sec = preprocess.rolling_mean(stream['watts'], window=3, mask=stream['moving'])
+>>> gradient_wo_outliers = preprocess.hampel_filter(stream['grade_smooth'], window=31, threshold=1)
+
+
+
+>>> stream = strava.retrieve_streams(activity_id=1282167861, access_token=STRAVA_ACCESS_TOKEN)
+
+
+>>> from vmpy import metrics
 >>> power_zones = metrics.zones(stream['watts'], ftp=270)
 >>> hr_zones = metrics.zones(stream['heartrate'], lthr=160)
 >>> best_1min = metrics.best_interval(stream['watts'], window=60)
