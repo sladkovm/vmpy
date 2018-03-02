@@ -10,7 +10,7 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Stress in zone
 
 Bug fixes:
 
@@ -22,7 +22,8 @@ Bug fixes:
 
 Breaking changes:
 
-- *add item here*
+- All stream shape preserving metrics did move to streams.py
+- All other calculations did move to metrics.py
 
 New features:
 
@@ -30,8 +31,7 @@ New features:
   (https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt)
 - Power Duration Curve
 - WPK calculations on array-like
-- Time in zone (to-do)
-- Stress in zone (to-do)
+- Time in zone
 
 Bug fixes:
 
