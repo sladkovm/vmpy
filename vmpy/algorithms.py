@@ -1,12 +1,10 @@
 """Implementations of algorithms for matching cycling data with various
 models.
 
-
-Models:
+Models
+------
 
 Power Duration Model: also known as Mean Max Power model or simply a power curve
-
-Author: Maksym Sladkov
 """
 from vmpy.preprocess import mask_fill
 from vmpy.utils import cast_array_to_original_type

@@ -2,7 +2,7 @@
 
 import numpy as np
 import pandas as pd
-from vmpy.preprocess import rolling_mean
+from vmpy.preprocess import rolling_mean, mask_fill
 from vmpy.utils import cast_array_to_original_type
 import logging
 logger = logging.getLogger(__name__)
@@ -17,6 +17,26 @@ POWER_ZONES_THRESHOLD_ZNAME = ["Z1", "Z2", "Z3", "Z4", "Z5", "Z6", "Z7"]
 HEART_RATE_ZONES = [-0.001, 0.68, 0.83, 0.94, 1.05, 10.0]
 HEART_RATE_ZONES_DESC = ["Active recovery", "Endurance", "Tempo", "Threshold", "VO2Max",]
 HEART_RATE_ZONES_ZNAME = ["Z1", "Z2", "Z3", "Z4", "Z5"]
+
+
+def wpk(power, weight):
+    """Watts per kilo
+
+    Parameters
+    ----------
+    power : list, ndarray, series
+    weight : number
+
+    Returns
+    -------
+    array-like
+    """
+
+    rv = pd.Series(power, dtype=float)/ weight
+    rv = cast_array_to_original_type(rv, type(power))
+
+    return rv
+
 
 
 def best_interval(arg, window, mask=None, value=0.0, **kwargs):
@@ -41,12 +61,17 @@ def best_interval(arg, window, mask=None, value=0.0, **kwargs):
 
     y = rolling_mean(arg, window=window, mask=mask, value=value, **kwargs)
 
-    if type(y) == list:
-        y = np.asarray(y)
-
-    rv = y.max()
+    rv = np.max(y)
 
     return rv
+
+
+def best_repeated_intervals(arg, window, mask=None, value=0.0, **kwargs):
+    """Compute best repeated intervals"""
+
+    y = rolling_mean(arg, window=window, mask=mask, value=value, **kwargs)
+
+    pass
 
 
 def zones(arg, **kwargs):
@@ -108,7 +133,6 @@ def normalized_power(arg, mask=None, value=0.0, **kwargs):
     type : {"xPower", "NP}
         Determines calculation method to use, default='xPower'
 
-
     Returns
     -------
     number
@@ -122,7 +146,7 @@ def normalized_power(arg, mask=None, value=0.0, **kwargs):
     if type(_rolling_mean) == list:
         _rolling_mean = np.asarray(_rolling_mean, dtype=np.float)
 
-    rv = np.mean(np.power(_rolling_mean, 4)) ** (1.0 / 4)
+    rv = np.mean(np.power(_rolling_mean, 4)) ** (1/4)
 
     return rv
 
@@ -160,16 +184,12 @@ def stress_score(norm_power, threshold_power, duration):
     duration : int
         Duration in seconds
 
-
     Returns
     -------
     ss:
         TSS or BikeScore
     """
 
-    ri = relative_intensity(norm_power, threshold_power)
-
-    ss = (duration * norm_power * ri) \
-         / (threshold_power * 3600) * 100
+    ss = (duration/3600) * (norm_power/threshold_power)**2 * 100
 
     return ss

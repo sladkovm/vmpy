@@ -28,6 +28,7 @@ Breaking changes:
 New features:
 
 - Power Duration Curve
+- WPK calculations on array-like
 - Time in zone (to-do)
 - Stress in zone (to-do)
 
