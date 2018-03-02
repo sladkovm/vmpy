@@ -3,7 +3,7 @@
 import numpy as np
 import pandas as pd
 from collections import namedtuple
-from vmpy.preprocess import rolling_mean, mask_fill
+from vmpy.streams import rolling_mean, mask_fill
 from vmpy.utils import cast_array_to_original_type
 import logging
 logger = logging.getLogger(__name__)

@@ -1,4 +1,4 @@
-"""Preprocessing operations: masking, filtering, smoothing"""
+"""Operation on Streams that leave the shape of the stream unchanged"""
 
 import numpy as np
 import pandas as pd
