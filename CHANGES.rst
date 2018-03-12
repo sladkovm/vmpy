@@ -26,7 +26,11 @@ Breaking changes:
 
 New features:
 
-- Stress in zone
+- Stress in zone (Todo)
+- Geohashing (Todo)
+- Wbal expenditure (Todo)
+- Energy expenditure in J and in kcal (Todo)
+- TRIMP (Todo)
 
 Bug fixes:
 
