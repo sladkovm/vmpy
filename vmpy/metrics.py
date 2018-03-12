@@ -41,7 +41,6 @@ def power_duration_curve(arg, mask=None, value=0.0, **kwargs):
     y = np.array([])
     for t in np.arange(1, len(energy)):
         y = np.append(y, energy.diff(t).max()/(t))
-
     y = cast_array_to_original_type(y, type(arg))
 
     return y
